@@ -1,0 +1,5 @@
+*~
+*.o
+MegaClient
+Makefile
+MegaClient.pro.user
