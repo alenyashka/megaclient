@@ -1,7 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QMainWindow>
+#include <QtGui>
+#include <QTcpSocket>
 
 namespace Ui
 {
@@ -14,10 +15,17 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+private slots:
+    void sendRequest();
+    void connectToServer();
+    void showMsgDialog();
+    void error();
 
 private:
     Ui::MainWindow *ui;
+    void closeConnection();
+    QTcpSocket tcpSocket;
+    quint16 nextBlockSize;
 };
 
 #endif // MAINWINDOW_H

@@ -5,12 +5,14 @@
 #-------------------------------------------------
 
 TARGET = MegaClient
+
 TEMPLATE = app
 
+QT += network
 
-SOURCES += main.cpp\
-        mainwindow.cpp
+SOURCES += src/main.cpp\
+        src/mainwindow.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += src/mainwindow.h
 
-FORMS    += mainwindow.ui
+FORMS    += src/mainwindow.ui
