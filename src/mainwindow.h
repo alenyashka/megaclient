@@ -15,6 +15,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = 0);
+
 private slots:
     void sendRequest();
     void connectToServer();
@@ -22,10 +23,16 @@ private slots:
     void error();
 
 private:
-    Ui::MainWindow *ui;
     void closeConnection();
+    void readSettings();
+    void writeSettings();
+    QString host;
+    qint16 port;
+    Ui::MainWindow *ui;
     QTcpSocket tcpSocket;
     quint16 nextBlockSize;
+protected:
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // MAINWINDOW_H

@@ -10,11 +10,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&tcpSocket, SIGNAL(readyRead()), this, SLOT(showMsgDialog()));
     connect(&tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
             this, SLOT(error()));
+    readSettings();
 }
 
 void MainWindow::connectToServer()
 {
-    tcpSocket.connectToHost("localhost", 6178);
+    tcpSocket.connectToHost(host, port);
     nextBlockSize = 0;
 }
 
@@ -67,4 +68,33 @@ void MainWindow::error()
 {
     qDebug() << tcpSocket.errorString();
     closeConnection();
+}
+
+void MainWindow::readSettings()
+{
+    QSettings settings("AlexAnis Inc.", "MegaClient");
+    QRect rect = settings.value("Interface/geometry",
+                                QRect(200, 200, 300, 103)).toRect();
+    move(rect.topLeft());
+    resize(rect.size());
+    host = settings.value("Network/host", "localhost").toString();
+    port = settings.value("Network/port", 6178).toInt();
+}
+
+void MainWindow::writeSettings()
+{
+    QSettings settings("AlexAnis Inc.", "MegaClient");
+    settings.beginGroup("Interface");
+    settings.setValue("geometry", geometry());
+    settings.endGroup();
+    settings.beginGroup("Network");
+    settings.setValue("host", host);
+    settings.setValue("port", port);
+    settings.endGroup();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    writeSettings();
+    event->accept();
 }
