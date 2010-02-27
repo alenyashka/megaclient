@@ -4,11 +4,6 @@
 #include <QtGui>
 #include <QTcpSocket>
 
-namespace Ui
-{
-    class MainWindow;
-}
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -26,11 +21,21 @@ private:
     void closeConnection();
     void readSettings();
     void writeSettings();
+    void createMainForm();
     QString host;
     qint16 port;
-    Ui::MainWindow *ui;
     QTcpSocket tcpSocket;
     quint16 nextBlockSize;
+    QPushButton *updateButton;
+    QPushButton *settingsButton;
+    QPushButton *quitButton;
+    QPushButton *viewTableButton;
+    QPushButton *addTableButton;
+    QPushButton *editTableButton;
+    QPushButton *delTableButton;
+    QStatusBar *statusBar;
+    QTableWidget *tableTableWidget;
+    QLabel *titleLabel;
 protected:
     void closeEvent(QCloseEvent *event);
 };
