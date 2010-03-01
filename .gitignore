@@ -1,7 +1,8 @@
 *~
 *.o
 MegaClient
-Makefile
+Makefile*
 MegaClient.pro.user
 .cproject
 .project
+debug
