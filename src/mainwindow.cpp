@@ -1,19 +1,20 @@
 #include "mainwindow.h"
-
+MainWindow *MainWindow::_self = 0;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     readSettings();
-    tableListWidget = new TableListWidget();
-    connect(tableListWidget, SIGNAL(close()), this, SLOT(close()));
-    connect(tableListWidget, SIGNAL(setStatusLabelText(QString)),
-            this, SLOT(setStatusLabelText(QString)));
-    setCentralWidget(tableListWidget);
     setWindowTitle(tr("Mega Client"));
     statusBar = new QStatusBar();
     statusLabel = new QLabel();
     statusBar->addWidget(statusLabel);
     this->setStatusBar(statusBar);
+}
+void MainWindow::show()
+{
+    tableListWidget = new TableListWidget();
+    setCentralWidget(tableListWidget);
+    setVisible(true);
 }
 
 void MainWindow::setStatusLabelText(const QString &text)

@@ -16,12 +16,14 @@ TableListWidget::TableListWidget()
     quitButton->setShortcut(tr("Ctrl+Q"));
     quitButton->setStatusTip(tr("Quit from application"));
     quitButton->setIcon(QIcon(":images/quit.png"));
-    connect(quitButton, SIGNAL(clicked()), this, SIGNAL(close()));
+    connect(quitButton, SIGNAL(clicked()),
+            MainWindow::Instance(), SLOT(close()));
 
     viewTableButton = new QPushButton(tr("View table"));
     viewTableButton->setStatusTip(tr("View records of selected tables"));
     viewTableButton->setShortcut(tr("Ctrl+Alt+V"));
     viewTableButton->setIcon(QIcon(":images/view.png"));
+    connect(viewTableButton, SIGNAL(clicked()), this, SLOT(viewRecords()));
 
     addTableButton = new QPushButton(tr("Add table"));
     addTableButton->setStatusTip(tr("Add tables to the list"));
@@ -86,7 +88,11 @@ void TableListWidget::updateTablesList()
     tcpSocket->connectToHost();
     tableTableWidget->setRowCount(0);
     updateButton->setEnabled(false);
-    emit setStatusLabelText(tr("Connecting to server..."));
+    viewTableButton->setEnabled(false);
+    addTableButton->setEnabled(false);
+    editTableButton->setEnabled(false);
+    delTableButton->setEnabled(false);
+    MainWindow::Instance()->setStatusLabelText(tr("Connecting to server..."));
     nextBlockSize = 0;
 }
 
@@ -94,7 +100,8 @@ void TableListWidget::connectionUpdateTablesListClosedByServer()
 {
     if (nextBlockSize != 0xFFFF)
     {
-        emit setStatusLabelText(tr("Error: Connection closed by server"));
+        MainWindow::Instance()->setStatusLabelText(
+                tr("Error: Connection closed by server"));
     }
     closeUpdateTablesListConnection();
 }
@@ -111,11 +118,20 @@ void TableListWidget::closeUpdateTablesListConnection()
     disconnect(tcpSocket, SIGNAL(disconnected()),
                this, SLOT(connectionUpdateTablesListClosedByServer()));
     updateButton->setEnabled(true);
+    if (tableTableWidget->rowCount() > 0)
+    {
+        tableTableWidget->selectRow(0);
+        viewTableButton->setEnabled(true);
+        addTableButton->setEnabled(true);
+        editTableButton->setEnabled(true);
+        delTableButton->setEnabled(true);
+    }
 }
 
 void TableListWidget::errorUpdateTablesList()
 {
-    emit setStatusLabelText(MegaTcpSocket::Instance()->errorString());
+    MainWindow::Instance()->setStatusLabelText(
+            MegaTcpSocket::Instance()->errorString());
     closeUpdateTablesListConnection();
 }
 
@@ -149,7 +165,8 @@ void TableListWidget::getUpdateTablesListResponse()
         if (nextBlockSize == 0xFFFF)
         {
             closeUpdateTablesListConnection();
-            emit setStatusLabelText(tr("Receipt %1 table(s)").arg(row));
+            MainWindow::Instance()->setStatusLabelText(
+                    tr("Receipt %1 table(s)").arg(row));
             break;
         }
         if (tcpSocket->bytesAvailable() < nextBlockSize) break;
@@ -161,4 +178,12 @@ void TableListWidget::getUpdateTablesListResponse()
         tableTableWidget->setItem(row, 1, new QTableWidgetItem(comment));
         nextBlockSize = 0;
     }
+}
+
+void TableListWidget::viewRecords()
+{
+    int row = tableTableWidget->currentRow();
+    QString tableName = tableTableWidget->item(row, 0)->text();
+    RecordListWidget *recordListWidget = new RecordListWidget(tableName);
+    MainWindow::Instance()->setCentralWidget(recordListWidget);
 }

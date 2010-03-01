@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/" >
         <file>images/add.png</file>
         <file>images/cancel.png</file>
         <file>images/del.png</file>
@@ -9,5 +9,6 @@
         <file>images/settings.png</file>
         <file>images/update.png</file>
         <file>images/view.png</file>
+        <file>images/back.png</file>
     </qresource>
 </RCC>

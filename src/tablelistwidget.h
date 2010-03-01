@@ -5,6 +5,7 @@
 #include <QWidget>
 #include "megatcpsocket.h"
 #include "megaprotocol.h"
+#include "mainwindow.h"
 
 class TableListWidget : public QWidget
 {
@@ -17,9 +18,7 @@ private slots:
     void getUpdateTablesListResponse();
     void errorUpdateTablesList();
     void connectionUpdateTablesListClosedByServer();
-signals:
-    void close();
-    void setStatusLabelText(const QString&);
+    void viewRecords();
 private:
     void closeUpdateTablesListConnection();
     QPushButton *updateButton;
