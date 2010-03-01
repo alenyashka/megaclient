@@ -2,7 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QtGui>
-#include <QTcpSocket>
+
+#include "megaprotocol.h"
+#include "tablelistwidget.h"
+#include "megatcpsocket.h"
 
 class MainWindow : public QMainWindow
 {
@@ -12,30 +15,14 @@ public:
     MainWindow(QWidget *parent = 0);
 
 private slots:
-    void sendRequest();
-    void connectToServer();
-    void showMsgDialog();
-    void error();
+    void setStatusLabelText(const QString &);
 
 private:
-    void closeConnection();
     void readSettings();
     void writeSettings();
-    void createMainForm();
-    QString host;
-    qint16 port;
-    QTcpSocket tcpSocket;
-    quint16 nextBlockSize;
-    QPushButton *updateButton;
-    QPushButton *settingsButton;
-    QPushButton *quitButton;
-    QPushButton *viewTableButton;
-    QPushButton *addTableButton;
-    QPushButton *editTableButton;
-    QPushButton *delTableButton;
     QStatusBar *statusBar;
-    QTableWidget *tableTableWidget;
-    QLabel *titleLabel;
+    QLabel *statusLabel;
+    TableListWidget *tableListWidget;
 protected:
     void closeEvent(QCloseEvent *event);
 };

@@ -5,7 +5,12 @@ TARGET = MegaClient
 TEMPLATE = app
 QT += network
 SOURCES += src/main.cpp \
-    src/mainwindow.cpp
-HEADERS += src/mainwindow.h
-FORMS +=
+    src/mainwindow.cpp \
+    src/tablelistwidget.cpp \
+    src/megatcpsocket.cpp
+HEADERS += src/mainwindow.h \
+    src/megaprotocol.h \
+    src/tablelistwidget.h \
+    src/megatcpsocket.h
+FORMS += 
 RESOURCES += MegaClient.qrc
