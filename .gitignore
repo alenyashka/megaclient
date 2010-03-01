@@ -3,3 +3,5 @@
 MegaClient
 Makefile
 MegaClient.pro.user
+.cproject
+.project
