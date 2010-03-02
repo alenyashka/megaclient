@@ -183,7 +183,15 @@ void TableListWidget::getUpdateTablesListResponse()
 void TableListWidget::viewRecords()
 {
     int row = tableTableWidget->currentRow();
-    QString tableName = tableTableWidget->item(row, 0)->text();
-    RecordListWidget *recordListWidget = new RecordListWidget(tableName);
-    MainWindow::Instance()->setCentralWidget(recordListWidget);
+    if (!(row < 0))
+    {
+        QString tableName = tableTableWidget->item(row, 0)->text();
+        RecordListWidget::Instance()->show(tableName);
+    }
+}
+
+void TableListWidget::show()
+{
+    MainWindow::Instance()->setCentralWidget(TableListWidget::Instance());
+    updateTablesList();
 }

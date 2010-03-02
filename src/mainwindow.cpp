@@ -12,8 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 }
 void MainWindow::show()
 {
-    tableListWidget = new TableListWidget();
-    setCentralWidget(tableListWidget);
+    TableListWidget::Instance()->show();
     setVisible(true);
 }
 

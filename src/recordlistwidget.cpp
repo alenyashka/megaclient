@@ -1,11 +1,12 @@
 #include "recordlistwidget.h"
 
-RecordListWidget::RecordListWidget(const QString &table)
+RecordListWidget::RecordListWidget()
 {
-    this->tableName = table;
     backButton = new QPushButton(tr("Back"));
     backButton->setStatusTip(tr("Back to the table's list"));
     backButton->setIcon(QIcon(":images/back.png"));
+    connect(backButton, SIGNAL(clicked()),
+            this, SLOT(backToTableList()));
 
     viewRecordButton = new QPushButton(tr("View record"));
     viewRecordButton->setStatusTip(tr("View current record"));
@@ -63,6 +64,13 @@ RecordListWidget::RecordListWidget(const QString &table)
     mainLayout->addWidget(titleLabel);
     mainLayout->addLayout(centralLayout);
     setLayout(mainLayout);
+    updateRecordsList();
+}
+
+void RecordListWidget::show(const QString &table)
+{
+    this->tableName = table;
+    MainWindow::Instance()->setCentralWidget(this);
     updateRecordsList();
 }
 
@@ -175,4 +183,9 @@ void RecordListWidget::getUpdateRecordsListResponse()
         }
         nextBlockSize = 0;
     }
+}
+
+void RecordListWidget::backToTableList()
+{
+    TableListWidget::Instance()->show();
 }

@@ -6,18 +6,23 @@
 #include "megatcpsocket.h"
 #include "megaprotocol.h"
 #include "mainwindow.h"
+#include "singleton.h"
 
-class RecordListWidget : public QWidget
+class RecordListWidget : public QWidget, public Singleton<RecordListWidget>
 {
     Q_OBJECT
 public:
-    RecordListWidget(const QString&);
+    void show(const QString&);
+protected:
+    RecordListWidget();
+    friend class Singleton<RecordListWidget>;
 private slots:
     void updateRecordsList();
     void sendUpdateRecordsListRequest();
     void getUpdateRecordsListResponse();
     void errorUpdateRecordsList();
     void connectionUpdateRecordsListClosedByServer();
+    void backToTableList();
 private:
     void closeUpdateRecordsListConnection();
     QString tableName;

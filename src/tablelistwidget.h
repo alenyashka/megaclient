@@ -6,12 +6,16 @@
 #include "megatcpsocket.h"
 #include "megaprotocol.h"
 #include "mainwindow.h"
+#include "singleton.h"
 
-class TableListWidget : public QWidget
+class TableListWidget : public QWidget, public Singleton<TableListWidget>
 {
     Q_OBJECT
-public:
+protected:
     TableListWidget();
+    friend class Singleton<TableListWidget>;
+public:
+    void show();
 private slots:
     void updateTablesList();
     void sendUpdateTablesListRequest();
