@@ -1,11 +1,5 @@
 #include "megatcpsocket.h"
 
-MegaTcpSocket *MegaTcpSocket::_self = 0;
-
-MegaTcpSocket::MegaTcpSocket()
-{
-}
-
 void MegaTcpSocket::setHost(const QString &host)
 {
     this->host = host;

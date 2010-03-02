@@ -13,6 +13,7 @@ HEADERS += src/mainwindow.h \
     src/megaprotocol.h \
     src/tablelistwidget.h \
     src/megatcpsocket.h \
-    src/recordlistwidget.h
+    src/recordlistwidget.h \
+    singleton.h
 FORMS += 
 RESOURCES += MegaClient.qrc

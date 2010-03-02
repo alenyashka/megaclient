@@ -2,31 +2,14 @@
 #define MEGATCPSOCKET_H
 
 #include <QTcpSocket>
+#include "singleton.h"
 
-class MegaTcpSocket : public QTcpSocket
+class MegaTcpSocket : public QTcpSocket, public Singleton<MegaTcpSocket>
 {
     Q_OBJECT
 protected:
-    static MegaTcpSocket *_self;
-    static int _refcount;
-    MegaTcpSocket();
-    virtual ~MegaTcpSocket()
-    {
-        _self = NULL;
-    }
+    friend class Singleton<MegaTcpSocket>;
 public:
-    static MegaTcpSocket *Instance()
-    {
-        if (!_self) _self = new MegaTcpSocket();
-        return _self;
-    }
-    void FreeInst()
-    {
-        if (--_refcount == 0)
-        {
-            delete this;
-        }
-    }
     void connectToHost();
     void setHost(const QString&);
     void setPort(const qint16&);
