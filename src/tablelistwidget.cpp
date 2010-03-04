@@ -29,6 +29,7 @@ TableListWidget::TableListWidget()
     addTableButton->setStatusTip(tr("Add tables to the list"));
     addTableButton->setShortcut(tr("Ctrl+Alt+A"));
     addTableButton->setIcon(QIcon(":images/add.png"));
+    connect(addTableButton, SIGNAL(clicked()), this, SLOT(addTable()));
 
     editTableButton = new QPushButton(tr("Edit table"));
     editTableButton->setStatusTip(tr("Edit current tabel"));
@@ -52,7 +53,7 @@ TableListWidget::TableListWidget()
                                                QSizePolicy::Expanding));
 
     titleLabel = new QLabel(tr("Table's list"));
-    titleLabel->setFont(QFont("Arial", 18, 10, false));
+    titleLabel->setFont(QFont("AlArabia", 20, 50, false));
 
     tableTableWidget = new QTableWidget();
     tableTableWidget->setColumnCount(2);
@@ -85,6 +86,7 @@ void TableListWidget::updateTablesList()
             this, SLOT(errorUpdateTablesList()));
     connect(tcpSocket, SIGNAL(disconnected()),
             this, SLOT(connectionUpdateTablesListClosedByServer()));
+    tcpSocket->abort();
     tcpSocket->connectToHost();
     tableTableWidget->setRowCount(0);
     updateButton->setEnabled(false);
@@ -126,6 +128,7 @@ void TableListWidget::closeUpdateTablesListConnection()
         editTableButton->setEnabled(true);
         delTableButton->setEnabled(true);
     }
+    tcpSocket->abort();
 }
 
 void TableListWidget::errorUpdateTablesList()
@@ -192,6 +195,12 @@ void TableListWidget::viewRecords()
 
 void TableListWidget::show()
 {
-    MainWindow::Instance()->setCentralWidget(TableListWidget::Instance());
+    MainWindow::Instance()->setCentralWidget(this);
+    MainWindow::Instance()->setStatusLabelText("");
     updateTablesList();
+}
+
+void TableListWidget::addTable()
+{
+    TableAdEdWidget::Instance()->show();
 }

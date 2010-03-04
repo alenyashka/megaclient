@@ -8,12 +8,14 @@ SOURCES += src/main.cpp \
     src/mainwindow.cpp \
     src/tablelistwidget.cpp \
     src/megatcpsocket.cpp \
-    src/recordlistwidget.cpp
+    src/recordlistwidget.cpp \
+    src/tableadedwidget.cpp
 HEADERS += src/mainwindow.h \
     src/megaprotocol.h \
     src/tablelistwidget.h \
     src/megatcpsocket.h \
     src/recordlistwidget.h \
-    singleton.h
+    singleton.h \
+    src/tableadedwidget.h
 FORMS += 
 RESOURCES += MegaClient.qrc

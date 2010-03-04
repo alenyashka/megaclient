@@ -7,6 +7,7 @@
 #include "megaprotocol.h"
 #include "mainwindow.h"
 #include "singleton.h"
+#include "tableadedwidget.h"
 
 class TableListWidget : public QWidget, public Singleton<TableListWidget>
 {
@@ -23,6 +24,7 @@ private slots:
     void errorUpdateTablesList();
     void connectionUpdateTablesListClosedByServer();
     void viewRecords();
+    void addTable();
 private:
     void closeUpdateTablesListConnection();
     QPushButton *updateButton;
