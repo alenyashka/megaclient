@@ -25,6 +25,7 @@ private slots:
     void connectionUpdateTablesListClosedByServer();
     void viewRecords();
     void addTable();
+    void editTable();
 private:
     void closeUpdateTablesListConnection();
     QPushButton *updateButton;

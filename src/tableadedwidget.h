@@ -39,6 +39,7 @@ private:
     QPushButton *cancelButton;
     quint16 nextBlockSize;
     Type action;
+    QString oldName;
 };
 
 #endif // TABLEADEDWIDGET_H

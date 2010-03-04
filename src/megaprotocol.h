@@ -6,7 +6,8 @@ class MegaProtocol {
     enum Commands {
         GET_TABLES_LIST,
         GET_RECORDS_LIST,
-        ADD_TABLE
+        ADD_TABLE,
+        EDIT_TABLE
     };
 };
 #endif // MEGAPROTOCOL_H

@@ -35,6 +35,7 @@ TableListWidget::TableListWidget()
     editTableButton->setStatusTip(tr("Edit current tabel"));
     editTableButton->setShortcut(tr("Ctrl+Alt+E"));
     editTableButton->setIcon(QIcon(":/images/edit.png"));
+    connect(editTableButton, SIGNAL(clicked()), this, SLOT(editTable()));
 
     delTableButton = new QPushButton(tr("Delete table"));
     delTableButton->setStatusTip(tr("Delete current tabel from the list"));
@@ -203,4 +204,15 @@ void TableListWidget::show()
 void TableListWidget::addTable()
 {
     TableAdEdWidget::Instance()->show();
+}
+
+void TableListWidget::editTable()
+{
+    int row = tableTableWidget->currentRow();
+    if (!(row < 0))
+    {
+        QString name = tableTableWidget->item(row, 0)->text();
+        QString comment = tableTableWidget->item(row, 1)->text();
+        TableAdEdWidget::Instance()->show(name, comment);
+    }
 }

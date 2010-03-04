@@ -51,6 +51,7 @@ TableAdEdWidget::TableAdEdWidget()
 void TableAdEdWidget::show(const QString &name,
                            const QString &comment)
 {
+    this->oldName = name;
     nameLineEdit->setText(name);
     commentTextEdit->setText(comment);
     errorLabel->setEnabled(true);
@@ -122,6 +123,11 @@ void TableAdEdWidget::sendRequest()
         out << MegaProtocol::ADD_TABLE << nameLineEdit->text() <<
                 commentTextEdit->toPlainText();
     }
+    else
+    {
+        out << MegaProtocol::EDIT_TABLE << oldName << nameLineEdit->text() <<
+                commentTextEdit->toPlainText();
+    }
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
     MegaTcpSocket::Instance()->write(block);
@@ -141,8 +147,16 @@ void TableAdEdWidget::getResponse()
     if (nextBlockSize == 0xFFFF)
     {
         closeConnection();
-        MainWindow::Instance()->setStatusLabelText(
-                tr("Table added successfully"));
+        QString err;
+        if (action == TableAdEdWidget::ADD)
+        {
+            err = tr("Table added successfully");
+        }
+        else
+        {
+            err = tr("Table edited successfully");
+        }
+        MainWindow::Instance()->setStatusLabelText(err);
         return;
     }
     QString err;
