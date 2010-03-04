@@ -37,8 +37,8 @@ RecordListWidget::RecordListWidget()
     rightLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
             QSizePolicy::Expanding));
 
-    titleLabel = new QLabel(tr("Table's list"));
-    titleLabel->setFont(QFont("Arial", 18, 10, false));
+    titleLabel = new QLabel();
+    titleLabel->setFont(QFont("AlArabia", 20, 50, false));
 
     recordTableWidget = new QTableWidget();
     recordTableWidget->setColumnCount(5);
@@ -71,6 +71,8 @@ void RecordListWidget::show(const QString &table)
 {
     this->tableName = table;
     MainWindow::Instance()->setCentralWidget(this);
+    MainWindow::Instance()->setStatusLabelText("");
+    titleLabel->setText(tr("Table: <i>%1</i>. Record list").arg(tableName));
     updateRecordsList();
 }
 
@@ -89,6 +91,7 @@ void RecordListWidget::updateRecordsList()
     addRecordButton->setEnabled(false);
     editRecordButton->setEnabled(false);
     delRecordButton->setEnabled(false);
+    tcpSocket->abort();
     tcpSocket->connectToHost();
     recordTableWidget->setRowCount(0);
     MainWindow::Instance()->setStatusLabelText(tr("Connecting to server..."));
@@ -124,6 +127,7 @@ void RecordListWidget::closeUpdateRecordsListConnection()
         editRecordButton->setEnabled(true);
         delRecordButton->setEnabled(true);
     }
+    tcpSocket->abort();
 }
 
 void RecordListWidget::errorUpdateRecordsList()
