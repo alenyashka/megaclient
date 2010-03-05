@@ -8,6 +8,7 @@
 #include "mainwindow.h"
 #include "singleton.h"
 #include "tableadedwidget.h"
+#include "tabledeletewidget.h"
 
 class TableListWidget : public QWidget, public Singleton<TableListWidget>
 {
@@ -26,6 +27,7 @@ private slots:
     void viewRecords();
     void addTable();
     void editTable();
+    void delTable();
 private:
     void closeUpdateTablesListConnection();
     QPushButton *updateButton;

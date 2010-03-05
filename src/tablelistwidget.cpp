@@ -41,6 +41,7 @@ TableListWidget::TableListWidget()
     delTableButton->setStatusTip(tr("Delete current tabel from the list"));
     delTableButton->setShortcut(tr("Ctrl+Alt+D"));
     delTableButton->setIcon(QIcon(":/images/del.png"));
+    connect(delTableButton, SIGNAL(clicked()), this, SLOT(delTable()));
 
     QVBoxLayout *rightLayout = new QVBoxLayout;
     rightLayout->addWidget(viewTableButton);
@@ -214,5 +215,15 @@ void TableListWidget::editTable()
         QString name = tableTableWidget->item(row, 0)->text();
         QString comment = tableTableWidget->item(row, 1)->text();
         TableAdEdWidget::Instance()->show(name, comment);
+    }
+}
+
+void TableListWidget::delTable()
+{
+    int row = tableTableWidget->currentRow();
+    if (!(row < 0))
+    {
+        QString tableName = tableTableWidget->item(row, 0)->text();
+        TableDeleteWidget::Instance()->show(tableName);
     }
 }
