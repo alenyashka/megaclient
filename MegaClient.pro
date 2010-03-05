@@ -16,7 +16,7 @@ HEADERS += src/mainwindow.h \
     src/tablelistwidget.h \
     src/megatcpsocket.h \
     src/recordlistwidget.h \
-    singleton.h \
+    src/singleton.h \
     src/tableadedwidget.h \
     src/tabledeletewidget.h
 FORMS +=
