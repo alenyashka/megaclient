@@ -21,3 +21,4 @@ HEADERS += src/mainwindow.h \
     src/tabledeletewidget.h
 FORMS +=
 RESOURCES += MegaClient.qrc
+TRANSLATIONS += MegaClient_ru.ts

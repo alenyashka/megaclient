@@ -6,3 +6,4 @@ MegaClient.pro.user
 .cproject
 .project
 debug
+*.qm
