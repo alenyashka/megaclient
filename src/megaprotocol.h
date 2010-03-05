@@ -7,7 +7,8 @@ class MegaProtocol {
         GET_TABLES_LIST,
         GET_RECORDS_LIST,
         ADD_TABLE,
-        EDIT_TABLE
+        EDIT_TABLE,
+        DEL_TABLE
     };
 };
 #endif // MEGAPROTOCOL_H
