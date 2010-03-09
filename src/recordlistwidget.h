@@ -7,6 +7,7 @@
 #include "megaprotocol.h"
 #include "mainwindow.h"
 #include "singleton.h"
+#include "recordadedview.h"
 
 class RecordListWidget : public QWidget, public Singleton<RecordListWidget>
 {
@@ -23,6 +24,7 @@ private slots:
     void errorUpdateRecordsList();
     void connectionUpdateRecordsListClosedByServer();
     void backToTableList();
+    void viewRecord();
 private:
     void closeUpdateRecordsListConnection();
     QString tableName;

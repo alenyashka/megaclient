@@ -12,6 +12,7 @@ RecordListWidget::RecordListWidget()
     viewRecordButton->setStatusTip(tr("View current record"));
     viewRecordButton->setShortcut(tr("Ctrl+Alt+V"));
     viewRecordButton->setIcon(QIcon(":images/view.png"));
+    connect(viewRecordButton, SIGNAL(clicked()), this, SLOT(viewRecord()));
 
     addRecordButton = new QPushButton(tr("Add record"));
     addRecordButton->setStatusTip(tr("Add record to the table"));
@@ -174,17 +175,37 @@ void RecordListWidget::getUpdateRecordsListResponse()
         if (tcpSocket->bytesAvailable() < nextBlockSize) break;
         QString title;
         QString comment;
-        QString readOnly;
-        QString type;
-        QString value;
+        bool readOnly;
+        QVariant::Type type;
+        QVariant value;
         in >> title >> comment >> readOnly >> type >> value;
-        QStringList fields;
-        fields << title << comment << readOnly << type << value;
         recordTableWidget->setRowCount(row + 1);
-        for (int i = 0; i < fields.count(); ++i)
+
+        recordTableWidget->setItem(row, 0, new QTableWidgetItem(title));
+        recordTableWidget->setItem(row, 1, new QTableWidgetItem(comment));
+        QTableWidgetItem *item = new QTableWidgetItem();
+        item->setTextAlignment(Qt::AlignCenter);
+        item->data(Qt::CheckStateRole);
+        item->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        if (readOnly)
         {
-            recordTableWidget->setItem(row, i, new QTableWidgetItem(fields[i]));
+            item->setCheckState(Qt::Checked);
         }
+        else
+        {
+            item->setCheckState(Qt::Unchecked);
+        }
+        recordTableWidget->setItem(row, 2, item);
+        item = new QTableWidgetItem();
+        QString t = type == QVariant::Double ? "Double" :
+                    type == QVariant::Int ? "Int" : "string";
+        item->setText(t);
+        item->setData(Qt::UserRole, type);
+        recordTableWidget->setItem(row, 3, item);
+        item = new QTableWidgetItem();
+        item->setText(value.toString());
+        item->setData(Qt::UserRole, value);
+        recordTableWidget->setItem(row, 4, item);
         nextBlockSize = 0;
     }
 }
@@ -192,4 +213,20 @@ void RecordListWidget::getUpdateRecordsListResponse()
 void RecordListWidget::backToTableList()
 {
     TableListWidget::Instance()->show();
+}
+
+void RecordListWidget::viewRecord()
+{
+    int row = recordTableWidget->currentRow();
+    if (!(row < 0))
+    {
+        QString title = recordTableWidget->item(row, 0)->text();
+        QString comment = recordTableWidget->item(row, 1)->text();
+        bool readOnly = recordTableWidget->item(row, 2)->checkState();
+        QVariant::Type type = recordTableWidget->item(row ,3)->data(
+                Qt::UserRole).type();
+        QVariant value = recordTableWidget->item(row, 4)->data(Qt::UserRole);
+        RecordAdEdView::Instance()->show(title, comment, readOnly, type, value,
+                                         tableName, RecordAdEdView::ViewMode);
+    }
 }
