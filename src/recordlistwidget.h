@@ -25,6 +25,8 @@ private slots:
     void connectionUpdateRecordsListClosedByServer();
     void backToTableList();
     void viewRecord();
+    void addRecord();
+    void editRecord();
 private:
     void closeUpdateRecordsListConnection();
     QString tableName;

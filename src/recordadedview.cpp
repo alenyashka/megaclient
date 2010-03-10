@@ -18,12 +18,16 @@ RecordAdEdView::RecordAdEdView()
     connect(backButton, SIGNAL(clicked()), this, SLOT(cancel()));
 
     titleLabel = new QLabel(tr("Title:"));
+    errorTitleLabel = new QLabel();
+    errorTitleLabel->setVisible(false);
     commentLabel = new QLabel(tr("Comment:"));
     readOnlyLabel = new QLabel(tr("Read only:"));
     typeLabel = new QLabel(tr("Type:"));
     valueLabel = new QLabel(tr("Value:"));
 
     titleLineEdit = new QLineEdit();
+    connect(titleLineEdit, SIGNAL(textEdited(QString)),
+            this, SLOT(hideError()));
     commentTextEdit = new QTextEdit();
     readOnlyCheckBox = new QCheckBox();
     typeComboBox = new QComboBox();
@@ -35,6 +39,7 @@ RecordAdEdView::RecordAdEdView()
     QVBoxLayout *titleLayout = new QVBoxLayout;
     titleLayout->addWidget(titleLabel);
     titleLayout->addWidget(titleLineEdit);
+    titleLayout->addWidget(errorTitleLabel);
 
     QVBoxLayout *commentLayout = new QVBoxLayout;
     commentLayout->addWidget(commentLabel);
@@ -80,19 +85,156 @@ RecordAdEdView::RecordAdEdView()
 
 void RecordAdEdView::cancel()
 {
-    RecordListWidget::Instance()->show(table);
+    closeConnection();
+}
+
+bool RecordAdEdView::isError()
+{
+    if (titleLineEdit->text() == "")
+    {
+        showError(tr("You should enter title of the record"));
+        titleLineEdit->setFocus();
+        return true;
+    }
+    return false;
+}
+
+void RecordAdEdView::showError(const QString &error)
+{
+    errorTitleLabel->setText(QString("<font color=red>").append(error).append("</font>"));
+    errorTitleLabel->setVisible(true);
 }
 
 void RecordAdEdView::ok()
 {
+    if (isError()) return;
+    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
+    connect(tcpSocket, SIGNAL(connected()), this, SLOT(sendRequest()));
+    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(getResponse()));
+    connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
+            this, SLOT(error()));
+    connect(tcpSocket, SIGNAL(disconnected()),
+            this, SLOT(connectionClosedByServer()));
+    tcpSocket->abort();
+    tcpSocket->connectToHost();
+    okButton->setEnabled(false);
+    MainWindow::Instance()->setStatusLabelText(tr("Connecting to server..."));
+    nextBlockSize = 0;
+}
 
+void RecordAdEdView::sendRequest()
+{
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_5);
+    out << quint16(0);
+    switch (mode)
+    {
+        case AddMode:
+            out << MegaProtocol::ADD_RECORD << this->table;
+            break;
+        case EditMode:
+            out << MegaProtocol::EDIT_RECORD << this->table << this->oldTitle;
+            break;
+        default:
+            break;
+    }
+    QVariant::Type type = (QVariant::Type) typeComboBox->itemData(
+                typeComboBox->currentIndex(),Qt::UserRole).toUInt();
+    QString valueText = valueLineEdit->text();
+    QVariant value = convert(valueText, type);
+
+    out << titleLineEdit->text() << commentTextEdit->toPlainText()
+        << readOnlyCheckBox->isChecked() << type << value;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+    MegaTcpSocket::Instance()->write(block);
+}
+
+void RecordAdEdView::getResponse()
+{
+    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
+    QDataStream in(tcpSocket);
+    in.setVersion(QDataStream::Qt_4_5);
+
+    if (nextBlockSize == 0)
+    {
+        if (tcpSocket->bytesAvailable() < sizeof(quint16)) return;
+        in >> nextBlockSize;
+    }
+    if (nextBlockSize == 0xFFFF)
+    {
+        closeConnection();
+        QString success;
+        switch (mode)
+        {
+            case AddMode:
+                success = tr("Record added successfully");
+                break;
+            case EditMode:
+                success = tr("Record edited successfully");
+                break;
+            default:
+                break;
+        }
+        MainWindow::Instance()->setStatusLabelText(success);
+        return;
+    }
+    uint err;
+    in >> err;
+    switch (err)
+    {
+        case MegaProtocol::RECORD_EXIST:
+            showError(tr("Record with this title already exist"));
+            titleLineEdit->selectAll();
+            titleLineEdit->setFocus();
+            tcpSocket->abort();
+            okButton->setEnabled(true);
+            nextBlockSize = 0;
+            break;
+        default:
+            break;
+    }
+}
+
+void RecordAdEdView::error()
+{
+    MainWindow::Instance()->setStatusLabelText(
+            MegaTcpSocket::Instance()->errorString());
+    closeConnection();
+}
+
+void RecordAdEdView::connectionClosedByServer()
+{
+    if (nextBlockSize != 0xFFFF)
+    {
+        MainWindow::Instance()->setStatusLabelText(
+                tr("Error: Connection closed by server"));
+    }
+}
+
+void RecordAdEdView::closeConnection()
+{
+    okButton->setEnabled(true);
+    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
+    disconnect(tcpSocket, SIGNAL(connected()), this, SLOT(sendRequest()));
+    disconnect(tcpSocket, SIGNAL(readyRead()), this, SLOT(getResponse()));
+    disconnect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
+               this, SLOT(error()));
+    disconnect(tcpSocket, SIGNAL(disconnected()),
+               this, SLOT(connectionClosedByServer()));
+    tcpSocket->abort();
     RecordListWidget::Instance()->show(table);
 }
 
-void RecordAdEdView::show(const QString &title, const QString &comment,
-                          const bool &readOnly, const QVariant::Type &type,
-                          const QVariant &value, const QString &table,
-                          const RecordAdEdView::Mode &mode)
+void RecordAdEdView::show(const QString &table,
+                          const RecordAdEdView::Mode &mode,
+                          const QString &title,
+                          const QString &comment,
+                          const bool &readOnly,
+                          const QVariant::Type &type,
+                          const QVariant &value)
 {
     this->oldTitle = title;
     this->table = table;
@@ -103,6 +245,7 @@ void RecordAdEdView::show(const QString &title, const QString &comment,
     commentTextEdit->setText(comment);
     readOnlyCheckBox->setChecked(readOnly);
     typeComboBox->setCurrentIndex(this->typeComboBoxIndex);
+    setValidatorComboBoxCurrentIndexChanged(typeComboBox->currentIndex());
     valueLineEdit->setText(value.toString());
     this->mode = mode;
     switch (mode)
@@ -121,6 +264,8 @@ void RecordAdEdView::show(const QString &title, const QString &comment,
             break;
         case EditMode:
         case AddMode:
+            connect(typeComboBox, SIGNAL(currentIndexChanged(int)),
+                    this, SLOT(setValidatorComboBoxCurrentIndexChanged(int)));
             okButton->setVisible(true);
             cancelButton->setVisible(true);
             backButton->setVisible(false);
@@ -139,4 +284,32 @@ void RecordAdEdView::readOnlyCheckBoxStateChanged()
 void RecordAdEdView::readOnlyComboBoxCurrentIndexChanged()
 {
     typeComboBox->setCurrentIndex(this->typeComboBoxIndex);
+}
+
+void RecordAdEdView::setValidatorComboBoxCurrentIndexChanged(const int &index)
+{
+    QVariant::Type type = (QVariant::Type) typeComboBox->itemData(
+            index, Qt::UserRole).toUInt();
+    switch (type)
+    {
+        case QVariant::Double:
+            valueLineEdit->setValidator(new QDoubleValidator(valueLineEdit));
+            valueLineEdit->setText("0.0");
+            break;
+        case QVariant::Int:
+            valueLineEdit->setValidator(new QIntValidator(valueLineEdit));
+            valueLineEdit->setText("0");
+            break;
+        case QVariant::String:
+            valueLineEdit->setValidator(NULL);
+            valueLineEdit->setText("");
+            break;
+        default:
+            break;
+    }
+}
+
+void RecordAdEdView::hideError()
+{
+    errorTitleLabel->setVisible(false);
 }

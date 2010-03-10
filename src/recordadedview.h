@@ -5,6 +5,9 @@
 #include <QWidget>
 #include "singleton.h"
 #include "mainwindow.h"
+#include "megatcpsocket.h"
+#include "megaprotocol.h"
+#include "util.h"
 
 class RecordAdEdView : public QWidget, public Singleton<RecordAdEdView>
 {
@@ -17,16 +20,29 @@ public:
 protected:
     RecordAdEdView();
     friend class Singleton<RecordAdEdView>;
-public slots:
-    void show(const QString&, const QString&, const bool&,
-              const QVariant::Type&, const QVariant&, const QString&,
-              const Mode&);
+public:
+    void show(const QString &table,
+              const RecordAdEdView::Mode &mode,
+              const QString &title = "",
+              const QString &comment = "",
+              const bool &readOnly = false,
+              const QVariant::Type &type = QVariant::Double,
+              const QVariant &value = 0.0);
 private slots:
     void ok();
     void cancel();
     void readOnlyCheckBoxStateChanged();
     void readOnlyComboBoxCurrentIndexChanged();
+    void setValidatorComboBoxCurrentIndexChanged(const int&);
+    void sendRequest();
+    void getResponse();
+    void error();
+    void connectionClosedByServer();
+    void hideError();
 private:
+    bool isError();
+    void closeConnection();
+    void showError(const QString&);
     Mode mode;
     QString table;
     QString oldTitle;
@@ -37,6 +53,7 @@ private:
     QLabel *readOnlyLabel;
     QLabel *typeLabel;
     QLabel *valueLabel;
+    QLabel *errorTitleLabel;
     QLineEdit *titleLineEdit;
     QTextEdit *commentTextEdit;
     QCheckBox *readOnlyCheckBox;
@@ -46,6 +63,7 @@ private:
     QPushButton *cancelButton;
     QPushButton *backButton;
     QGroupBox *groupBox;
+    quint16 nextBlockSize;
 
 };
 

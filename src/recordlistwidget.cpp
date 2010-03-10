@@ -18,11 +18,13 @@ RecordListWidget::RecordListWidget()
     addRecordButton->setStatusTip(tr("Add record to the table"));
     addRecordButton->setShortcut(tr("Ctrl+Alt+A"));
     addRecordButton->setIcon(QIcon(":images/add.png"));
+    connect(addRecordButton, SIGNAL(clicked()), this, SLOT(addRecord()));
 
     editRecordButton = new QPushButton(tr("Edit record"));
     editRecordButton->setStatusTip(tr("Edit current record"));
     editRecordButton->setShortcut(tr("Ctrl+Alt+E"));
     editRecordButton->setIcon(QIcon(":/images/edit.png"));
+    connect(editRecordButton, SIGNAL(clicked()), this, SLOT(editRecord()));
 
     delRecordButton = new QPushButton(tr("Delete record"));
     delRecordButton->setStatusTip(tr("Delete current record from the list"));
@@ -226,7 +228,28 @@ void RecordListWidget::viewRecord()
         QVariant::Type type = recordTableWidget->item(row ,3)->data(
                 Qt::UserRole).type();
         QVariant value = recordTableWidget->item(row, 4)->data(Qt::UserRole);
-        RecordAdEdView::Instance()->show(title, comment, readOnly, type, value,
-                                         tableName, RecordAdEdView::ViewMode);
+        RecordAdEdView::Instance()->show(tableName, RecordAdEdView::ViewMode,
+                                         title, comment, readOnly, type, value);
+    }
+}
+
+void RecordListWidget::addRecord()
+{
+    RecordAdEdView::Instance()->show(tableName, RecordAdEdView::AddMode);
+}
+
+void RecordListWidget::editRecord()
+{
+    int row = recordTableWidget->currentRow();
+    if (!(row < 0))
+    {
+        QString title = recordTableWidget->item(row, 0)->text();
+        QString comment = recordTableWidget->item(row, 1)->text();
+        bool readOnly = recordTableWidget->item(row, 2)->checkState();
+        QVariant::Type type = recordTableWidget->item(row ,3)->data(
+                Qt::UserRole).type();
+        QVariant value = recordTableWidget->item(row, 4)->data(Qt::UserRole);
+        RecordAdEdView::Instance()->show(tableName, RecordAdEdView::EditMode,
+                                         title, comment, readOnly, type, value);
     }
 }
