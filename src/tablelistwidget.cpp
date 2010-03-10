@@ -20,10 +20,15 @@ TableListWidget::TableListWidget()
             MainWindow::Instance(), SLOT(close()));
 
     viewTableButton = new QPushButton(tr("View table"));
-    viewTableButton->setStatusTip(tr("View records of selected tables"));
+    viewTableButton->setStatusTip(tr("View selected table"));
     viewTableButton->setShortcut(tr("Ctrl+Alt+V"));
     viewTableButton->setIcon(QIcon(":images/view.png"));
-    connect(viewTableButton, SIGNAL(clicked()), this, SLOT(viewRecords()));
+    connect(viewTableButton, SIGNAL(clicked()), this, SLOT(viewTable()));
+
+    viewRecordsButton = new QPushButton(tr("View records"));
+    viewRecordsButton->setStatusTip(tr("View records of selected tables"));
+    viewRecordsButton->setIcon(QIcon(":images/view.png"));
+    connect(viewRecordsButton, SIGNAL(clicked()), this, SLOT(viewRecords()));
 
     addTableButton = new QPushButton(tr("Add table"));
     addTableButton->setStatusTip(tr("Add tables to the list"));
@@ -44,6 +49,7 @@ TableListWidget::TableListWidget()
     connect(delTableButton, SIGNAL(clicked()), this, SLOT(delTable()));
 
     QVBoxLayout *rightLayout = new QVBoxLayout;
+    rightLayout->addWidget(viewRecordsButton);
     rightLayout->addWidget(viewTableButton);
     rightLayout->addWidget(addTableButton);
     rightLayout->addWidget(editTableButton);
@@ -195,6 +201,18 @@ void TableListWidget::viewRecords()
     }
 }
 
+void TableListWidget::viewTable()
+{
+    int row = tableTableWidget->currentRow();
+    if (!(row < 0))
+    {
+        QString name = tableTableWidget->item(row, 0)->text();
+        QString comment = tableTableWidget->item(row, 1)->text();
+        TableAdEdWidget::Instance()->show(TableAdEdWidget::ViewMode,
+                                          name, comment);
+    }
+}
+
 void TableListWidget::show()
 {
     MainWindow::Instance()->setCentralWidget(this);
@@ -204,7 +222,7 @@ void TableListWidget::show()
 
 void TableListWidget::addTable()
 {
-    TableAdEdWidget::Instance()->show();
+    TableAdEdWidget::Instance()->show(TableAdEdWidget::AddMode);
 }
 
 void TableListWidget::editTable()
@@ -214,7 +232,8 @@ void TableListWidget::editTable()
     {
         QString name = tableTableWidget->item(row, 0)->text();
         QString comment = tableTableWidget->item(row, 1)->text();
-        TableAdEdWidget::Instance()->show(name, comment);
+        TableAdEdWidget::Instance()->show(TableAdEdWidget::EditMode,
+                                          name, comment);
     }
 }
 

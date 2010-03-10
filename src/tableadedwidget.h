@@ -15,7 +15,12 @@ protected:
     TableAdEdWidget();
     friend class Singleton<TableAdEdWidget>;
 public:
-    void show(const QString &name = "", const QString &comment = "");
+    enum Mode
+    {
+        ViewMode, AddMode, EditMode
+    };
+    void show(const Mode&, const QString &name = "",
+              const QString &comment = "");
 private slots:
     void ok();
     void cancel();
@@ -25,7 +30,6 @@ private slots:
     void connectionClosedByServer();
     void hideError();
 private:
-    enum Type {ADD = 0, EDIT = 1};
     bool isError();
     void showError(const QString&);
     void closeConnection();
@@ -37,8 +41,9 @@ private:
     QTextEdit *commentTextEdit;
     QPushButton *okButton;
     QPushButton *cancelButton;
+    QPushButton *backButton;
     quint16 nextBlockSize;
-    Type action;
+    Mode mode;
     QString oldName;
 };
 

@@ -25,6 +25,7 @@ private slots:
     void errorUpdateTablesList();
     void connectionUpdateTablesListClosedByServer();
     void viewRecords();
+    void viewTable();
     void addTable();
     void editTable();
     void delTable();
@@ -34,6 +35,7 @@ private:
     QPushButton *settingsButton;
     QPushButton *quitButton;
     QPushButton *viewTableButton;
+    QPushButton *viewRecordsButton;
     QPushButton *addTableButton;
     QPushButton *editTableButton;
     QPushButton *delTableButton;

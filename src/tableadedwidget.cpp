@@ -12,6 +12,11 @@ TableAdEdWidget::TableAdEdWidget()
     cancelButton->setIcon(QIcon(":/images/cancel.png"));
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
 
+    backButton = new QPushButton(tr("Back"));
+    backButton->setStatusTip(tr("Back to tables list"));
+    backButton->setIcon(QIcon(":images/back.png"));
+    connect(backButton, SIGNAL(clicked()), this, SLOT(cancel()));
+
     titleLabel = new QLabel();
     titleLabel->setFont(QFont("AlArabia", 20, 50, false));
     nameLabel = new QLabel(tr("Name:"));
@@ -35,6 +40,7 @@ TableAdEdWidget::TableAdEdWidget()
     QVBoxLayout *buttonLayout = new QVBoxLayout;
     buttonLayout->addWidget(okButton);
     buttonLayout->addWidget(cancelButton);
+    buttonLayout->addWidget(backButton);
     buttonLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                 QSizePolicy::Expanding));
     QHBoxLayout *centralLayout = new QHBoxLayout;
@@ -48,24 +54,31 @@ TableAdEdWidget::TableAdEdWidget()
     setLayout(mainLayout);
 }
 
-void TableAdEdWidget::show(const QString &name,
+void TableAdEdWidget::show(const Mode &mode,
+                           const QString &name,
                            const QString &comment)
 {
     this->oldName = name;
     nameLineEdit->setText(name);
     commentTextEdit->setText(comment);
-    errorLabel->setEnabled(true);
-    //nameLineEdit->selectAll();
     nameLineEdit->setFocus();
-    if (name == "")
+    this->mode = mode;
+    switch (mode)
     {
-        titleLabel->setText(tr("Add table"));
-        action = this->ADD;
-    }
-    else
-    {
-        titleLabel->setText(tr("Edit table"));
-        action = this->EDIT;
+        case ViewMode:
+            nameLineEdit->setReadOnly(true);
+            commentTextEdit->setReadOnly(true);
+            backButton->setVisible(true);
+            okButton->setVisible(false);
+            cancelButton->setVisible(false);
+            break;
+        case AddMode:
+        case EditMode:
+            nameLineEdit->setReadOnly(false);
+            commentTextEdit->setReadOnly(false);
+            backButton->setVisible(false);
+            okButton->setVisible(true);
+            cancelButton->setVisible(true);
     }
     MainWindow::Instance()->setCentralWidget(this);
     MainWindow::Instance()->setStatusLabelText("");
@@ -118,16 +131,18 @@ void TableAdEdWidget::sendRequest()
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_5);
     out << quint16(0);
-    if (action == this->ADD)
+    switch (mode)
     {
-        out << MegaProtocol::ADD_TABLE << nameLineEdit->text() <<
-                commentTextEdit->toPlainText();
+        case AddMode:
+            out << MegaProtocol::ADD_TABLE;
+            break;
+        case EditMode:
+            out << MegaProtocol::EDIT_TABLE << oldName;
+            break;
+        default:
+            break;
     }
-    else
-    {
-        out << MegaProtocol::EDIT_TABLE << oldName << nameLineEdit->text() <<
-                commentTextEdit->toPlainText();
-    }
+    out << nameLineEdit->text() << commentTextEdit->toPlainText();
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
     MegaTcpSocket::Instance()->write(block);
@@ -147,16 +162,19 @@ void TableAdEdWidget::getResponse()
     if (nextBlockSize == 0xFFFF)
     {
         closeConnection();
-        QString err;
-        if (action == TableAdEdWidget::ADD)
+        QString success;
+        switch (mode)
         {
-            err = tr("Table added successfully");
+            case AddMode:
+                success = tr("Table added successfully");
+                break;
+            case EditMode:
+                success = tr("Table edited successfully");
+                break;
+            default:
+                break;
         }
-        else
-        {
-            err = tr("Table edited successfully");
-        }
-        MainWindow::Instance()->setStatusLabelText(err);
+        MainWindow::Instance()->setStatusLabelText(success);
         return;
     }
     QString err;
