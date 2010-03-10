@@ -183,14 +183,21 @@ void TableAdEdWidget::getResponse()
         MainWindow::Instance()->setStatusLabelText(success);
         return;
     }
-    QString err;
+    uint err;
     in >> err;
-    showError(err);
-    nameLineEdit->selectAll();
-    nameLineEdit->setFocus();
-    tcpSocket->abort();
-    okButton->setEnabled(true);
-    nextBlockSize = 0;
+    switch (err)
+    {
+        case MegaProtocol::TABLE_EXIST:
+            showError(tr("Table with this name already exist"));
+            nameLineEdit->selectAll();
+            nameLineEdit->setFocus();
+            tcpSocket->abort();
+            okButton->setEnabled(true);
+            nextBlockSize = 0;
+            break;
+        default:
+            break;
+    }
 }
 
 void TableAdEdWidget::error()
