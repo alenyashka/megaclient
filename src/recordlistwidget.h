@@ -8,6 +8,7 @@
 #include "mainwindow.h"
 #include "singleton.h"
 #include "recordadedview.h"
+#include "recorddeletewidget.h"
 
 class RecordListWidget : public QWidget, public Singleton<RecordListWidget>
 {
@@ -27,6 +28,7 @@ private slots:
     void viewRecord();
     void addRecord();
     void editRecord();
+    void delRecord();
 private:
     void closeUpdateRecordsListConnection();
     QString tableName;

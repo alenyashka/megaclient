@@ -30,6 +30,7 @@ RecordListWidget::RecordListWidget()
     delRecordButton->setStatusTip(tr("Delete current record from the list"));
     delRecordButton->setShortcut(tr("Ctrl+Alt+D"));
     delRecordButton->setIcon(QIcon(":/images/del.png"));
+    connect(delRecordButton, SIGNAL(clicked()), this, SLOT(delRecord()));
 
     QVBoxLayout *rightLayout = new QVBoxLayout;
     rightLayout->addWidget(viewRecordButton);
@@ -251,5 +252,15 @@ void RecordListWidget::editRecord()
         QVariant value = recordTableWidget->item(row, 4)->data(Qt::UserRole);
         RecordAdEdView::Instance()->show(tableName, RecordAdEdView::EditMode,
                                          title, comment, readOnly, type, value);
+    }
+}
+
+void RecordListWidget::delRecord()
+{
+    int row = recordTableWidget->currentRow();
+    if (!(row < 0))
+    {
+        QString title = recordTableWidget->item(row, 0)->text();
+        RecordDeleteWidget::Instance()->show(this->tableName, title);
     }
 }
