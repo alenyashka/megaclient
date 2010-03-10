@@ -11,7 +11,8 @@ SOURCES += src/main.cpp \
     src/recordlistwidget.cpp \
     src/tableadedwidget.cpp \
     src/tabledeletewidget.cpp \
-    src/recordadedview.cpp
+    src/recordadedview.cpp \
+    src/util.cpp
 HEADERS += src/mainwindow.h \
     src/megaprotocol.h \
     src/tablelistwidget.h \
@@ -20,7 +21,8 @@ HEADERS += src/mainwindow.h \
     src/singleton.h \
     src/tableadedwidget.h \
     src/tabledeletewidget.h \
-    src/recordadedview.h
+    src/recordadedview.h \
+    src/util.h
 FORMS += 
 RESOURCES += MegaClient.qrc
 TRANSLATIONS += MegaClient_ru.ts
