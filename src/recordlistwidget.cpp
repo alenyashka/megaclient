@@ -213,6 +213,8 @@ void RecordListWidget::getUpdateRecordsListResponse()
         recordTableWidget->setItem(row, 4, item);
         nextBlockSize = 0;
     }
+    recordTableWidget->resizeColumnsToContents();
+    recordTableWidget->resizeRowsToContents();
 }
 
 void RecordListWidget::backToTableList()

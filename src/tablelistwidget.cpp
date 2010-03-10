@@ -193,6 +193,8 @@ void TableListWidget::getUpdateTablesListResponse()
         tableTableWidget->setItem(row, 1, new QTableWidgetItem(comment));
         nextBlockSize = 0;
     }
+    tableTableWidget->resizeColumnsToContents();
+    tableTableWidget->resizeRowsToContents();
 }
 
 void TableListWidget::viewRecords()
