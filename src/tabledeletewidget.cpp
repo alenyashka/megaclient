@@ -12,17 +12,13 @@ TableDeleteWidget::TableDeleteWidget()
     noButton->setIcon(QIcon(":/images/cancel.png"));
     connect(noButton, SIGNAL(clicked()), this, SLOT(cancel()));
 
-    titleLabel = new QLabel();
-    titleLabel->setFont(QFont("AlArabia", 20, 50, false));
     messageLabel = new QLabel();
-    messageLabel->setFont(QFont("AlArabia", 14, 40, false));
-    errorLabel = new QLabel();
-    errorLabel->setFont(QFont("AlArabia", 16, 40, false));
-    errorLabel->setVisible(false);
 
     QVBoxLayout *buttonLayout = new QVBoxLayout;
     buttonLayout->addWidget(yesButton);
     buttonLayout->addWidget(noButton);
+    buttonLayout->addSpacerItem(new QSpacerItem(220, 20, QSizePolicy::Fixed,
+                                                QSizePolicy::Fixed));
     buttonLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                 QSizePolicy::Expanding));
 
@@ -30,24 +26,18 @@ TableDeleteWidget::TableDeleteWidget()
     leftLayout->addWidget(messageLabel);
     leftLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                 QSizePolicy::Expanding));
-    leftLayout->addWidget(errorLabel);
+    groupBox = new QGroupBox(tr("Delete table"));
+    groupBox->setLayout(leftLayout);
 
-    QHBoxLayout *centralLayout = new QHBoxLayout;
-    centralLayout->addLayout(leftLayout);
-    centralLayout->addSpacerItem(new QSpacerItem(40, 20, QSizePolicy::Expanding,
-                                                 QSizePolicy::Minimum));
-    centralLayout->addLayout(buttonLayout);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(titleLabel);
-    mainLayout->addLayout(centralLayout);
+    QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout->addWidget(groupBox);
+    mainLayout->addLayout(buttonLayout);
 
     setLayout(mainLayout);
 }
 
 void TableDeleteWidget::show(const QString &name)
 {
-    titleLabel->setText(tr("Delete table: %1.").arg(name));
     this->tableName = name;
     MainWindow::Instance()->setCentralWidget(this);
     MainWindow::Instance()->setStatusLabelText("");
@@ -109,12 +99,6 @@ void TableDeleteWidget::sendRequest()
     MegaTcpSocket::Instance()->write(block);
 }
 
-void TableDeleteWidget::showError(const QString &error)
-{
-    errorLabel->setText(QString("<font color=red>").append(error).append("</font>"));
-    errorLabel->setVisible(true);
-}
-
 void TableDeleteWidget::getResponse()
 {
     MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
@@ -133,9 +117,6 @@ void TableDeleteWidget::getResponse()
                 tr("Table deleted successfully"));
         return;
     }
-    QString err;
-    in >> err;
-    showError(err);
     tcpSocket->abort();
     nextBlockSize = 0;
 }

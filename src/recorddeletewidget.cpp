@@ -19,6 +19,8 @@ RecordDeleteWidget::RecordDeleteWidget()
     QVBoxLayout *buttonLayout = new QVBoxLayout;
     buttonLayout->addWidget(yesButton);
     buttonLayout->addWidget(noButton);
+    buttonLayout->addSpacerItem(new QSpacerItem(220, 20, QSizePolicy::Fixed,
+                                                QSizePolicy::Fixed));
     buttonLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                 QSizePolicy::Expanding));
 
@@ -28,7 +30,7 @@ RecordDeleteWidget::RecordDeleteWidget()
     leftLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                               QSizePolicy::Expanding));
 
-    groupBox = new QGroupBox(tr("Confirm delete record"));
+    groupBox = new QGroupBox(tr("Delete record"));
     groupBox->setLayout(leftLayout);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;

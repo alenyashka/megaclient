@@ -23,14 +23,12 @@ private slots:
     void error();
     void connectionClosedByServer();
 private:
-    void showError(const QString&);
     void closeConnection();
     QString tableName;
     QPushButton *yesButton;
     QPushButton *noButton;
-    QLabel *titleLabel;
+    QGroupBox *groupBox;
     QLabel *messageLabel;
-    QLabel *errorLabel;
     quint16 nextBlockSize;
 };
 

@@ -40,7 +40,8 @@ private:
     QPushButton *editTableButton;
     QPushButton *delTableButton;
     QTableWidget *tableTableWidget;
-    QLabel *titleLabel;
+//    QLabel *titleLabel;
+    QGroupBox *groupBox;
     quint16 nextBlockSize;
 };
 

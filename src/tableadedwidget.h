@@ -33,7 +33,8 @@ private:
     bool isError();
     void showError(const QString&);
     void closeConnection();
-    QLabel *titleLabel;
+    void readOnlyMode(const bool&);
+    QGroupBox *groupBox;
     QLabel *nameLabel;
     QLabel *commentLabel;
     QLabel *errorLabel;

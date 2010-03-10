@@ -17,12 +17,9 @@ TableAdEdWidget::TableAdEdWidget()
     backButton->setIcon(QIcon(":images/back.png"));
     connect(backButton, SIGNAL(clicked()), this, SLOT(cancel()));
 
-    titleLabel = new QLabel();
-    titleLabel->setFont(QFont("AlArabia", 20, 50, false));
     nameLabel = new QLabel(tr("Name:"));
     commentLabel = new QLabel(tr("Comment:"));
     errorLabel = new QLabel();
-    errorLabel->setFont(QFont("AlArabia", 16, 40, false));
     errorLabel->setVisible(false);
 
     nameLineEdit = new QLineEdit();
@@ -33,23 +30,25 @@ TableAdEdWidget::TableAdEdWidget()
     QVBoxLayout *leftLayout = new QVBoxLayout;
     leftLayout->addWidget(nameLabel);
     leftLayout->addWidget(nameLineEdit);
+    leftLayout->addWidget(errorLabel);
     leftLayout->addWidget(commentLabel);
     leftLayout->addWidget(commentTextEdit);
-    leftLayout->addWidget(errorLabel);
+
+    groupBox = new QGroupBox();
+    groupBox->setLayout(leftLayout);
 
     QVBoxLayout *buttonLayout = new QVBoxLayout;
     buttonLayout->addWidget(okButton);
     buttonLayout->addWidget(cancelButton);
     buttonLayout->addWidget(backButton);
+    buttonLayout->addSpacerItem(new QSpacerItem(220, 20, QSizePolicy::Fixed,
+                                                QSizePolicy::Fixed));
     buttonLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                 QSizePolicy::Expanding));
-    QHBoxLayout *centralLayout = new QHBoxLayout;
-    centralLayout->addLayout(leftLayout);
-    centralLayout->addLayout(buttonLayout);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(titleLabel);
-    mainLayout->addLayout(centralLayout);
+    QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout->addWidget(groupBox);
+    mainLayout->addLayout(buttonLayout);
 
     setLayout(mainLayout);
 }
@@ -66,22 +65,29 @@ void TableAdEdWidget::show(const Mode &mode,
     switch (mode)
     {
         case ViewMode:
-            nameLineEdit->setReadOnly(true);
-            commentTextEdit->setReadOnly(true);
-            backButton->setVisible(true);
-            okButton->setVisible(false);
-            cancelButton->setVisible(false);
+            readOnlyMode(true);
+            groupBox->setTitle(tr("View table"));
             break;
         case AddMode:
+            readOnlyMode(false);
+            groupBox->setTitle(tr("Add table"));
+            break;
         case EditMode:
-            nameLineEdit->setReadOnly(false);
-            commentTextEdit->setReadOnly(false);
-            backButton->setVisible(false);
-            okButton->setVisible(true);
-            cancelButton->setVisible(true);
+            readOnlyMode(false);
+            groupBox->setTitle(tr("Edit table"));
+            break;
     }
     MainWindow::Instance()->setCentralWidget(this);
     MainWindow::Instance()->setStatusLabelText("");
+}
+
+void TableAdEdWidget::readOnlyMode(const bool &state)
+{
+    nameLineEdit->setReadOnly(state);
+    commentTextEdit->setReadOnly(state);
+    backButton->setVisible(state);
+    okButton->setVisible(!state);
+    cancelButton->setVisible(!state);
 }
 
 void TableAdEdWidget::cancel()

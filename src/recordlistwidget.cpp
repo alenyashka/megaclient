@@ -38,11 +38,10 @@ RecordListWidget::RecordListWidget()
     rightLayout->addWidget(editRecordButton);
     rightLayout->addWidget(delRecordButton);
     rightLayout->addWidget(backButton);
+    rightLayout->addSpacerItem(new QSpacerItem(220, 20, QSizePolicy::Fixed,
+                                               QSizePolicy::Fixed));
     rightLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
             QSizePolicy::Expanding));
-
-    titleLabel = new QLabel();
-    titleLabel->setFont(QFont("AlArabia", 20, 50, false));
 
     recordTableWidget = new QTableWidget();
     recordTableWidget->setColumnCount(5);
@@ -60,13 +59,16 @@ RecordListWidget::RecordListWidget()
     recordTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     recordTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     recordTableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(recordTableWidget);
-    centralLayout->addLayout(rightLayout);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(titleLabel);
-    mainLayout->addLayout(centralLayout);
+    groupBox = new QGroupBox();
+    groupBox->setLayout(centralLayout);
+
+    QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout->addWidget(groupBox);
+    mainLayout->addLayout(rightLayout);
     setLayout(mainLayout);
     updateRecordsList();
 }
@@ -76,7 +78,7 @@ void RecordListWidget::show(const QString &table)
     this->tableName = table;
     MainWindow::Instance()->setCentralWidget(this);
     MainWindow::Instance()->setStatusLabelText("");
-    titleLabel->setText(tr("Table: <i>%1</i>. Record list").arg(tableName));
+    groupBox->setTitle(tr("Table: [%1]").arg(tableName));
     updateRecordsList();
 }
 

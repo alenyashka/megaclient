@@ -67,13 +67,15 @@ RecordAdEdView::RecordAdEdView()
     groupBoxLayout->addLayout(typeLayout);
     groupBoxLayout->addLayout(valueLayout);
 
-    groupBox = new QGroupBox(tr("Record"));
+    groupBox = new QGroupBox();
     groupBox->setLayout(groupBoxLayout);
 
     QVBoxLayout *buttonLayout = new QVBoxLayout;
     buttonLayout->addWidget(okButton);
     buttonLayout->addWidget(cancelButton);
     buttonLayout->addWidget(backButton);
+    buttonLayout->addSpacerItem(new QSpacerItem(220, 20, QSizePolicy::Fixed,
+                                                QSizePolicy::Fixed));
     buttonLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                 QSizePolicy::Expanding));
     QHBoxLayout *mainLayout = new QHBoxLayout;
@@ -252,14 +254,17 @@ void RecordAdEdView::show(const QString &table,
     {
         case ViewMode:
             viewMode();
+            groupBox->setTitle(tr("View record"));
             break;
         case EditMode:
+            groupBox->setTitle(tr("Edit record"));
             if (readOnly)
             {
                 viewMode();
                 break;
             }
         case AddMode:
+            groupBox->setTitle(tr("Add record"));
             connect(typeComboBox, SIGNAL(currentIndexChanged(int)),
                     this, SLOT(setValidatorComboBoxCurrentIndexChanged(int)));
             okButton->setVisible(true);

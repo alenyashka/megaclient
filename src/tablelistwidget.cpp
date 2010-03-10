@@ -57,11 +57,12 @@ TableListWidget::TableListWidget()
     rightLayout->addWidget(updateButton);
     rightLayout->addWidget(settingsButton);
     rightLayout->addWidget(quitButton);
+    rightLayout->addSpacerItem(new QSpacerItem(220, 20, QSizePolicy::Fixed,
+                                               QSizePolicy::Fixed));
     rightLayout->addSpacerItem(new QSpacerItem(20,40,QSizePolicy::Minimum,
                                                QSizePolicy::Expanding));
 
-    titleLabel = new QLabel(tr("Table's list"));
-    titleLabel->setFont(QFont("AlArabia", 20, 50, false));
+
 
     tableTableWidget = new QTableWidget();
     tableTableWidget->setColumnCount(2);
@@ -73,13 +74,16 @@ TableListWidget::TableListWidget()
     tableTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tableTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     tableTableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(tableTableWidget);
-    centralLayout->addLayout(rightLayout);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(titleLabel);
-    mainLayout->addLayout(centralLayout);
+    groupBox = new QGroupBox(tr("Table's list"));
+    groupBox->setLayout(centralLayout);
+
+    QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout->addWidget(groupBox);
+    mainLayout->addLayout(rightLayout);
     setLayout(mainLayout);
 }
 

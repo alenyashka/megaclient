@@ -38,7 +38,7 @@ private:
     QPushButton *editRecordButton;
     QPushButton *delRecordButton;
     QTableWidget *recordTableWidget;
-    QLabel *titleLabel;
+    QGroupBox *groupBox;
     quint16 nextBlockSize;
 };
 
