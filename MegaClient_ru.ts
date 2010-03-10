@@ -10,6 +10,166 @@
     </message>
 </context>
 <context>
+    <name>RecordAdEdView</name>
+    <message>
+        <location filename="src/recordadedview.cpp" line="5"/>
+        <source>Ok</source>
+        <translation>Ок</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="6"/>
+        <source>Finish the operation</source>
+        <translation>Завершить операцию</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="10"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="11"/>
+        <source>Cancel the operation</source>
+        <translation>Отменить операцию</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="15"/>
+        <source>Back</source>
+        <translation>Назад</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="16"/>
+        <source>Back to record&apos;s list</source>
+        <translation>Назад к списку записей</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="20"/>
+        <source>Title:</source>
+        <translation>Заголовок:</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="23"/>
+        <source>Comment:</source>
+        <translation>Комментарий:</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="24"/>
+        <source>Read only:</source>
+        <translation>Только чтение:</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="25"/>
+        <source>Type:</source>
+        <translation>Тип:</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="26"/>
+        <source>Value:</source>
+        <translation>Значение:</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="97"/>
+        <source>You should enter title of the record</source>
+        <translation>Вы должны ввести заголовок записи</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="123"/>
+        <source>Connecting to server...</source>
+        <translation>Подключение к серверу...</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="175"/>
+        <source>Record added successfully</source>
+        <translation>Запись успешно добавлена</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="178"/>
+        <source>Record edited successfully</source>
+        <translation>Запись успешно изменена</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="191"/>
+        <source>Record with this title already exist</source>
+        <translation>Запись с таким заголовком уже существует</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="215"/>
+        <source>Error: Connection closed by server</source>
+        <translation>Ошибка: Соединение было закрыто сервером</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="257"/>
+        <source>View record</source>
+        <translation>Посмотреть запись</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="260"/>
+        <source>Edit record</source>
+        <translation>Редактировать запись</translation>
+    </message>
+    <message>
+        <location filename="src/recordadedview.cpp" line="267"/>
+        <source>Add record</source>
+        <translation>Добавить запись</translation>
+    </message>
+</context>
+<context>
+    <name>RecordDeleteWidget</name>
+    <message>
+        <location filename="src/recorddeletewidget.cpp" line="5"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="src/recorddeletewidget.cpp" line="6"/>
+        <source>Finish the operation</source>
+        <translation>Завершить операцию</translation>
+    </message>
+    <message>
+        <location filename="src/recorddeletewidget.cpp" line="10"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="src/recorddeletewidget.cpp" line="11"/>
+        <source>Cancel the operation</source>
+        <translation>Отменить операцию</translation>
+    </message>
+    <message>
+        <location filename="src/recorddeletewidget.cpp" line="33"/>
+        <source>Delete record</source>
+        <translation>Удалить запись</translation>
+    </message>
+    <message>
+        <location filename="src/recorddeletewidget.cpp" line="50"/>
+        <source>Now record %1 will be deleted from table %2.
+This action can not be reverted.
+Do you agree?</source>
+        <translation>Сейчас запись %1 будет удалена из таблицы %2.
+Это действие не может быть отменено.
+Вы уверены что хотите удалить запись?</translation>
+    </message>
+    <message>
+        <location filename="src/recorddeletewidget.cpp" line="75"/>
+        <source>Connecting to server...</source>
+        <translation>Подключение к серверу...</translation>
+    </message>
+    <message>
+        <location filename="src/recorddeletewidget.cpp" line="106"/>
+        <source>Record deleted successfully</source>
+        <translation>Запись успешно удалена</translation>
+    </message>
+    <message>
+        <location filename="src/recorddeletewidget.cpp" line="114"/>
+        <source>This record is read only</source>
+        <translation>Эта запись доступна только для чтения</translation>
+    </message>
+    <message>
+        <location filename="src/recorddeletewidget.cpp" line="130"/>
+        <source>Error: Connection closed by server</source>
+        <translation>Ошибка: Соединение было закрыто сервером</translation>
+    </message>
+</context>
+<context>
     <name>RecordListWidget</name>
     <message>
         <location filename="src/recordlistwidget.cpp" line="5"/>
@@ -37,92 +197,96 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="16"/>
+        <location filename="src/recordlistwidget.cpp" line="17"/>
         <source>Add record</source>
         <translation>Добавить запись</translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="17"/>
+        <location filename="src/recordlistwidget.cpp" line="18"/>
         <source>Add record to the table</source>
         <translation>Добавить запись в таблицу</translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="18"/>
+        <location filename="src/recordlistwidget.cpp" line="19"/>
         <source>Ctrl+Alt+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="21"/>
+        <location filename="src/recordlistwidget.cpp" line="23"/>
         <source>Edit record</source>
         <translation>Редактировать запись</translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="22"/>
+        <location filename="src/recordlistwidget.cpp" line="24"/>
         <source>Edit current record</source>
         <translation>Редактировать выбранную запись</translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="23"/>
+        <location filename="src/recordlistwidget.cpp" line="25"/>
         <source>Ctrl+Alt+E</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="26"/>
+        <location filename="src/recordlistwidget.cpp" line="29"/>
         <source>Delete record</source>
         <translation>Удалить запись</translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="27"/>
+        <location filename="src/recordlistwidget.cpp" line="30"/>
         <source>Delete current record from the list</source>
         <translation>Удалить выбранную запись из таблицы</translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="28"/>
+        <location filename="src/recordlistwidget.cpp" line="31"/>
         <source>Ctrl+Alt+D</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="47"/>
+        <location filename="src/recordlistwidget.cpp" line="50"/>
         <source>Title</source>
         <translation>Заголовок</translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="48"/>
+        <location filename="src/recordlistwidget.cpp" line="51"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="50"/>
+        <location filename="src/recordlistwidget.cpp" line="53"/>
         <source>ReadOnly</source>
         <translation>Только чтение</translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="52"/>
+        <location filename="src/recordlistwidget.cpp" line="55"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="54"/>
+        <location filename="src/recordlistwidget.cpp" line="57"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="75"/>
-        <source>Table: &lt;i&gt;%1&lt;/i&gt;. Record list</source>
-        <translation>Таблица:&lt;i&gt;%1&lt;/i&gt;. Список записей</translation>
+        <location filename="src/recordlistwidget.cpp" line="81"/>
+        <source>Table: [%1]</source>
+        <translation>Таблица: [%1]</translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="97"/>
+        <source>Table: &lt;i&gt;%1&lt;/i&gt;. Record list</source>
+        <translation type="obsolete">Таблица:&lt;i&gt;%1&lt;/i&gt;. Список записей</translation>
+    </message>
+    <message>
+        <location filename="src/recordlistwidget.cpp" line="103"/>
         <source>Connecting to server...</source>
         <translation>Подключение к серверу...</translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="106"/>
+        <location filename="src/recordlistwidget.cpp" line="112"/>
         <source>Error: Connection closed by server</source>
         <translation>Ошибка: Соединение было закрыто сервером</translation>
     </message>
     <message>
-        <location filename="src/recordlistwidget.cpp" line="171"/>
+        <location filename="src/recordlistwidget.cpp" line="177"/>
         <source>Receipt %1 record(s)</source>
         <translation>Получено %1 записей</translation>
     </message>
@@ -150,47 +314,67 @@
         <translation>Отменить операцию</translation>
     </message>
     <message>
-        <location filename="src/tableadedwidget.cpp" line="17"/>
+        <location filename="src/tableadedwidget.cpp" line="15"/>
+        <source>Back</source>
+        <translation>Назад</translation>
+    </message>
+    <message>
+        <location filename="src/tableadedwidget.cpp" line="16"/>
+        <source>Back to tables list</source>
+        <translation>Назад к списку таблиц</translation>
+    </message>
+    <message>
+        <location filename="src/tableadedwidget.cpp" line="20"/>
         <source>Name:</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="src/tableadedwidget.cpp" line="18"/>
+        <location filename="src/tableadedwidget.cpp" line="21"/>
         <source>Comment:</source>
         <translation>Комментарий:</translation>
     </message>
     <message>
-        <location filename="src/tableadedwidget.cpp" line="62"/>
+        <location filename="src/tableadedwidget.cpp" line="69"/>
+        <source>View table</source>
+        <translation>Просмотр таблицы</translation>
+    </message>
+    <message>
+        <location filename="src/tableadedwidget.cpp" line="73"/>
         <source>Add table</source>
         <translation>Добавление таблицы</translation>
     </message>
     <message>
-        <location filename="src/tableadedwidget.cpp" line="67"/>
+        <location filename="src/tableadedwidget.cpp" line="77"/>
         <source>Edit table</source>
         <translation>Редактирование таблицы</translation>
     </message>
     <message>
-        <location filename="src/tableadedwidget.cpp" line="83"/>
+        <location filename="src/tableadedwidget.cpp" line="102"/>
         <source>You should enter name of the table</source>
         <translation>Необходимо ввести имя таблицы</translation>
     </message>
     <message>
-        <location filename="src/tableadedwidget.cpp" line="111"/>
+        <location filename="src/tableadedwidget.cpp" line="130"/>
         <source>Connecting to server...</source>
         <translation>Подключение к серверу...</translation>
     </message>
     <message>
-        <location filename="src/tableadedwidget.cpp" line="153"/>
+        <location filename="src/tableadedwidget.cpp" line="175"/>
         <source>Table added successfully</source>
         <translation>Таблица успешно добавлена</translation>
     </message>
     <message>
-        <location filename="src/tableadedwidget.cpp" line="157"/>
+        <location filename="src/tableadedwidget.cpp" line="178"/>
         <source>Table edited successfully</source>
         <translation>Таблица успешно отредактирована</translation>
     </message>
     <message>
-        <location filename="src/tableadedwidget.cpp" line="184"/>
+        <location filename="src/tableadedwidget.cpp" line="191"/>
+        <source>Table with this name already exist</source>
+        <translation>Таблица с таким именем уже существует</translation>
+    </message>
+    <message>
+        <location filename="src/tableadedwidget.cpp" line="215"/>
         <source>Error: Connection closed by server</source>
         <translation>Ошибка: Соединение было закрыто сервером</translation>
     </message>
@@ -218,12 +402,16 @@
         <translation>Отменить операцию</translation>
     </message>
     <message>
-        <location filename="src/tabledeletewidget.cpp" line="50"/>
-        <source>Delete table: %1.</source>
-        <translation>Удаление таблицы: %1.</translation>
+        <location filename="src/tabledeletewidget.cpp" line="29"/>
+        <source>Delete table</source>
+        <translation>Удалить таблицу</translation>
     </message>
     <message>
-        <location filename="src/tabledeletewidget.cpp" line="54"/>
+        <source>Delete table: %1.</source>
+        <translation type="obsolete">Удаление таблицы: %1.</translation>
+    </message>
+    <message>
+        <location filename="src/tabledeletewidget.cpp" line="44"/>
         <source>Now table %1 will be delete.
 This action can not be reverted.
 Do you agree?</source>
@@ -232,17 +420,17 @@ Do you agree?</source>
 Вы уверены что хотите удалить таблицу?</translation>
     </message>
     <message>
-        <location filename="src/tabledeletewidget.cpp" line="79"/>
+        <location filename="src/tabledeletewidget.cpp" line="69"/>
         <source>Connecting to server...</source>
         <translation>Подключение к серверу...</translation>
     </message>
     <message>
-        <location filename="src/tabledeletewidget.cpp" line="133"/>
+        <location filename="src/tabledeletewidget.cpp" line="117"/>
         <source>Table deleted successfully</source>
         <translation>Таблица успешно удалена</translation>
     </message>
     <message>
-        <location filename="src/tabledeletewidget.cpp" line="155"/>
+        <location filename="src/tabledeletewidget.cpp" line="136"/>
         <source>Error: Connection closed by server</source>
         <translation>Ошибка: Соединение было закрыто сервером</translation>
     </message>
@@ -295,7 +483,7 @@ Do you agree?</source>
         <translation>Просмотр таблицы</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="23"/>
+        <location filename="src/tablelistwidget.cpp" line="29"/>
         <source>View records of selected tables</source>
         <translation>Просмотреть записи выбраннойй таблицы</translation>
     </message>
@@ -305,77 +493,87 @@ Do you agree?</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="src/tablelistwidget.cpp" line="23"/>
+        <source>View selected table</source>
+        <translation>Просмотреть записи выбранной таблицы</translation>
+    </message>
+    <message>
         <location filename="src/tablelistwidget.cpp" line="28"/>
+        <source>View records</source>
+        <translation>Просмотр записей</translation>
+    </message>
+    <message>
+        <location filename="src/tablelistwidget.cpp" line="33"/>
         <source>Add table</source>
         <translation>Добавить таблицу</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="29"/>
+        <location filename="src/tablelistwidget.cpp" line="34"/>
         <source>Add tables to the list</source>
         <translation>Добавить таблицу в список</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="30"/>
+        <location filename="src/tablelistwidget.cpp" line="35"/>
         <source>Ctrl+Alt+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="34"/>
+        <location filename="src/tablelistwidget.cpp" line="39"/>
         <source>Edit table</source>
         <translation>Редактировать таблицу</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="35"/>
+        <location filename="src/tablelistwidget.cpp" line="40"/>
         <source>Edit current tabel</source>
         <translation>Редактировать выбранную таблицу</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="36"/>
+        <location filename="src/tablelistwidget.cpp" line="41"/>
         <source>Ctrl+Alt+E</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="40"/>
+        <location filename="src/tablelistwidget.cpp" line="45"/>
         <source>Delete table</source>
         <translation>Удалить таблицу</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="41"/>
+        <location filename="src/tablelistwidget.cpp" line="46"/>
         <source>Delete current tabel from the list</source>
         <translation>Удалить текущую таблицу из списка</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="42"/>
+        <location filename="src/tablelistwidget.cpp" line="47"/>
         <source>Ctrl+Alt+D</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="57"/>
+        <location filename="src/tablelistwidget.cpp" line="81"/>
         <source>Table&apos;s list</source>
         <translation>Список таблиц</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="64"/>
+        <location filename="src/tablelistwidget.cpp" line="71"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="66"/>
+        <location filename="src/tablelistwidget.cpp" line="73"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="99"/>
+        <location filename="src/tablelistwidget.cpp" line="109"/>
         <source>Connecting to server...</source>
         <translation>Подключение к серверу...</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="108"/>
+        <location filename="src/tablelistwidget.cpp" line="118"/>
         <source>Error: Connection closed by server</source>
         <translation>Ошибка: Соединение было закрыто сервером</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="174"/>
+        <location filename="src/tablelistwidget.cpp" line="184"/>
         <source>Receipt %1 table(s)</source>
         <translation>Получено %1 таблиц</translation>
     </message>
