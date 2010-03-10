@@ -14,6 +14,7 @@ class MegaProtocol {
         DEL_RECORD
     };
     enum Errors {
+        TABLE_EXIST,
         RECORD_EXIST,
         RECORD_IS_READ_ONLY
     };
