@@ -8,7 +8,13 @@ class MegaProtocol {
         GET_RECORDS_LIST,
         ADD_TABLE,
         EDIT_TABLE,
-        DEL_TABLE
+        DEL_TABLE,
+        ADD_RECORD,
+        EDIT_RECORD,
+        DEL_RECORD
+    };
+    enum Errors {
+        RECORD_EXIST
     };
 };
 #endif // MEGAPROTOCOL_H
