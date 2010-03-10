@@ -132,11 +132,11 @@ void TableListWidget::closeUpdateTablesListConnection()
     disconnect(tcpSocket, SIGNAL(disconnected()),
                this, SLOT(connectionUpdateTablesListClosedByServer()));
     updateButton->setEnabled(true);
+    addTableButton->setEnabled(true);
     if (tableTableWidget->rowCount() > 0)
     {
         tableTableWidget->selectRow(0);
         viewTableButton->setEnabled(true);
-        addTableButton->setEnabled(true);
         editTableButton->setEnabled(true);
         delTableButton->setEnabled(true);
     }

@@ -125,11 +125,11 @@ void RecordListWidget::closeUpdateRecordsListConnection()
                this, SLOT(errorUpdateRecordsList()));
     disconnect(tcpSocket, SIGNAL(disconnected()),
                this, SLOT(connectionUpdateRecordsListClosedByServer()));
+    addRecordButton->setEnabled(true);
     if (recordTableWidget->rowCount() > 0)
     {
         recordTableWidget->selectRow(0);
         viewRecordButton->setEnabled(true);
-        addRecordButton->setEnabled(true);
         editRecordButton->setEnabled(true);
         delRecordButton->setEnabled(true);
     }
