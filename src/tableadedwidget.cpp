@@ -73,7 +73,7 @@ void TableAdEdWidget::show(const QString &name,
 
 void TableAdEdWidget::cancel()
 {
-    TableListWidget::Instance()->show();
+    closeConnection();
 }
 
 bool TableAdEdWidget::isError()
