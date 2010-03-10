@@ -14,7 +14,8 @@ class MegaProtocol {
         DEL_RECORD
     };
     enum Errors {
-        RECORD_EXIST
+        RECORD_EXIST,
+        RECORD_IS_READ_ONLY
     };
 };
 #endif // MEGAPROTOCOL_H
