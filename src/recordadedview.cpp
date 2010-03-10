@@ -251,18 +251,14 @@ void RecordAdEdView::show(const QString &table,
     switch (mode)
     {
         case ViewMode:
-            titleLineEdit->setReadOnly(true);
-            commentTextEdit->setReadOnly(true);
-            connect(readOnlyCheckBox, SIGNAL(stateChanged(int)),
-                    this, SLOT(readOnlyCheckBoxStateChanged()));
-            connect(typeComboBox, SIGNAL(currentIndexChanged(int)),
-                    this, SLOT(readOnlyComboBoxCurrentIndexChanged()));
-            valueLineEdit->setReadOnly(true);
-            okButton->setVisible(false);
-            cancelButton->setVisible(false);
-            backButton->setVisible(true);
+            viewMode();
             break;
         case EditMode:
+            if (readOnly)
+            {
+                viewMode();
+                break;
+            }
         case AddMode:
             connect(typeComboBox, SIGNAL(currentIndexChanged(int)),
                     this, SLOT(setValidatorComboBoxCurrentIndexChanged(int)));
@@ -274,6 +270,20 @@ void RecordAdEdView::show(const QString &table,
 
     MainWindow::Instance()->setCentralWidget(this);
     MainWindow::Instance()->setStatusLabelText("");
+}
+
+void RecordAdEdView::viewMode()
+{
+    titleLineEdit->setReadOnly(true);
+    commentTextEdit->setReadOnly(true);
+    connect(readOnlyCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(readOnlyCheckBoxStateChanged()));
+    connect(typeComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(readOnlyComboBoxCurrentIndexChanged()));
+    valueLineEdit->setReadOnly(true);
+    okButton->setVisible(false);
+    cancelButton->setVisible(false);
+    backButton->setVisible(true);
 }
 
 void RecordAdEdView::readOnlyCheckBoxStateChanged()

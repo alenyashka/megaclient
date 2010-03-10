@@ -43,6 +43,7 @@ private:
     bool isError();
     void closeConnection();
     void showError(const QString&);
+    void viewMode();
     Mode mode;
     QString table;
     QString oldTitle;
