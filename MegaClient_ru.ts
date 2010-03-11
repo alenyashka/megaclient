@@ -292,6 +292,44 @@ Do you agree?</source>
     </message>
 </context>
 <context>
+    <name>SettingsWidget</name>
+    <message>
+        <location filename="src/settingswidget.cpp" line="5"/>
+        <source>Ok</source>
+        <translation>Ок</translation>
+    </message>
+    <message>
+        <location filename="src/settingswidget.cpp" line="6"/>
+        <source>Save changes</source>
+        <translation>Сохранить изменения</translation>
+    </message>
+    <message>
+        <location filename="src/settingswidget.cpp" line="10"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="src/settingswidget.cpp" line="11"/>
+        <source>Cancel changes</source>
+        <translation>Отменить изменения</translation>
+    </message>
+    <message>
+        <location filename="src/settingswidget.cpp" line="15"/>
+        <source>Host:</source>
+        <translation>Хост:</translation>
+    </message>
+    <message>
+        <location filename="src/settingswidget.cpp" line="16"/>
+        <source>Port:</source>
+        <translation>Порт:</translation>
+    </message>
+    <message>
+        <location filename="src/settingswidget.cpp" line="38"/>
+        <source>Settings</source>
+        <translation>Настройки</translation>
+    </message>
+</context>
+<context>
     <name>TableAdEdWidget</name>
     <message>
         <location filename="src/tableadedwidget.cpp" line="5"/>
@@ -463,117 +501,117 @@ Do you agree?</source>
         <translation>Редактирование настроек приложения</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="15"/>
+        <location filename="src/tablelistwidget.cpp" line="16"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="16"/>
+        <location filename="src/tablelistwidget.cpp" line="17"/>
         <source>Ctrl+Q</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="17"/>
+        <location filename="src/tablelistwidget.cpp" line="18"/>
         <source>Quit from application</source>
         <translation>Выход из приложения</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="22"/>
+        <location filename="src/tablelistwidget.cpp" line="23"/>
         <source>View table</source>
         <translation>Просмотр таблицы</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="29"/>
+        <location filename="src/tablelistwidget.cpp" line="30"/>
         <source>View records of selected tables</source>
         <translation>Просмотреть записи выбраннойй таблицы</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="24"/>
+        <location filename="src/tablelistwidget.cpp" line="25"/>
         <source>Ctrl+Alt+V</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="23"/>
+        <location filename="src/tablelistwidget.cpp" line="24"/>
         <source>View selected table</source>
         <translation>Просмотреть записи выбранной таблицы</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="28"/>
+        <location filename="src/tablelistwidget.cpp" line="29"/>
         <source>View records</source>
         <translation>Просмотр записей</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="33"/>
+        <location filename="src/tablelistwidget.cpp" line="34"/>
         <source>Add table</source>
         <translation>Добавить таблицу</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="34"/>
+        <location filename="src/tablelistwidget.cpp" line="35"/>
         <source>Add tables to the list</source>
         <translation>Добавить таблицу в список</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="35"/>
+        <location filename="src/tablelistwidget.cpp" line="36"/>
         <source>Ctrl+Alt+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="39"/>
+        <location filename="src/tablelistwidget.cpp" line="40"/>
         <source>Edit table</source>
         <translation>Редактировать таблицу</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="40"/>
+        <location filename="src/tablelistwidget.cpp" line="41"/>
         <source>Edit current tabel</source>
         <translation>Редактировать выбранную таблицу</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="41"/>
+        <location filename="src/tablelistwidget.cpp" line="42"/>
         <source>Ctrl+Alt+E</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="45"/>
+        <location filename="src/tablelistwidget.cpp" line="46"/>
         <source>Delete table</source>
         <translation>Удалить таблицу</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="46"/>
+        <location filename="src/tablelistwidget.cpp" line="47"/>
         <source>Delete current tabel from the list</source>
         <translation>Удалить текущую таблицу из списка</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="47"/>
+        <location filename="src/tablelistwidget.cpp" line="48"/>
         <source>Ctrl+Alt+D</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="81"/>
+        <location filename="src/tablelistwidget.cpp" line="82"/>
         <source>Table&apos;s list</source>
         <translation>Список таблиц</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="71"/>
+        <location filename="src/tablelistwidget.cpp" line="72"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="73"/>
+        <location filename="src/tablelistwidget.cpp" line="74"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="109"/>
+        <location filename="src/tablelistwidget.cpp" line="110"/>
         <source>Connecting to server...</source>
         <translation>Подключение к серверу...</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="118"/>
+        <location filename="src/tablelistwidget.cpp" line="119"/>
         <source>Error: Connection closed by server</source>
         <translation>Ошибка: Соединение было закрыто сервером</translation>
     </message>
     <message>
-        <location filename="src/tablelistwidget.cpp" line="184"/>
+        <location filename="src/tablelistwidget.cpp" line="185"/>
         <source>Receipt %1 table(s)</source>
         <translation>Получено %1 таблиц</translation>
     </message>
