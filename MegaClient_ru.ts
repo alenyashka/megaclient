@@ -324,7 +324,7 @@ Do you agree?</source>
         <translation>Порт:</translation>
     </message>
     <message>
-        <location filename="src/settingswidget.cpp" line="38"/>
+        <location filename="src/settingswidget.cpp" line="40"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
@@ -523,7 +523,7 @@ Do you agree?</source>
     <message>
         <location filename="src/tablelistwidget.cpp" line="30"/>
         <source>View records of selected tables</source>
-        <translation>Просмотреть записи выбраннойй таблицы</translation>
+        <translation>Просмотреть записи выбранной таблицы</translation>
     </message>
     <message>
         <location filename="src/tablelistwidget.cpp" line="25"/>
