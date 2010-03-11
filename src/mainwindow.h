@@ -17,10 +17,10 @@ protected:
     void closeEvent(QCloseEvent *event);
 public:
     void setStatusLabelText(const QString&);
+    void writeSettings();
     void show();
 private:
     void readSettings();
-    void writeSettings();
     QStatusBar *statusBar;
     QLabel *statusLabel;
     TableListWidget *tableListWidget;

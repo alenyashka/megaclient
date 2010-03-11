@@ -11,6 +11,7 @@ TableListWidget::TableListWidget()
     settingsButton = new QPushButton(tr("Settings"));
     settingsButton->setStatusTip(tr("Edit settings of application"));
     settingsButton->setIcon(QIcon(":images/settings.png"));
+    connect(settingsButton, SIGNAL(clicked()), this, SLOT(settings()));
 
     quitButton = new QPushButton(tr("Quit"));
     quitButton->setShortcut(tr("Ctrl+Q"));
@@ -251,4 +252,9 @@ void TableListWidget::delTable()
         QString tableName = tableTableWidget->item(row, 0)->text();
         TableDeleteWidget::Instance()->show(tableName);
     }
+}
+
+void TableListWidget::settings()
+{
+    SettingsWidget::Instance()->show();
 }
