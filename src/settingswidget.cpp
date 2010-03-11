@@ -25,6 +25,8 @@ SettingsWidget::SettingsWidget()
     QVBoxLayout *buttonLayout = new QVBoxLayout;
     buttonLayout->addWidget(okButton);
     buttonLayout->addWidget(cancelButton);
+    buttonLayout->addSpacerItem(new QSpacerItem(220, 20, QSizePolicy::Fixed,
+                                                QSizePolicy::Fixed));
     buttonLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                 QSizePolicy::Expanding));
 
