@@ -203,7 +203,7 @@ void RecordListWidget::getUpdateRecordsListResponse()
         recordTableWidget->setItem(row, 2, item);
         item = new QTableWidgetItem();
         QString t = type == QVariant::Double ? "Double" :
-                    type == QVariant::Int ? "Int" : "string";
+                    type == QVariant::Int ? "Int" : "String";
         item->setText(t);
         item->setData(Qt::UserRole, type);
         recordTableWidget->setItem(row, 3, item);
