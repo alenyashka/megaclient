@@ -104,6 +104,7 @@ void TableListWidget::updateTablesList()
     tableTableWidget->setRowCount(0);
     updateButton->setEnabled(false);
     viewTableButton->setEnabled(false);
+    viewRecordsButton->setEnabled(false);
     addTableButton->setEnabled(false);
     editTableButton->setEnabled(false);
     delTableButton->setEnabled(false);
@@ -137,6 +138,7 @@ void TableListWidget::closeUpdateTablesListConnection()
     if (tableTableWidget->rowCount() > 0)
     {
         tableTableWidget->selectRow(0);
+        viewRecordsButton->setEnabled(true);
         viewTableButton->setEnabled(true);
         editTableButton->setEnabled(true);
         delTableButton->setEnabled(true);
@@ -146,9 +148,23 @@ void TableListWidget::closeUpdateTablesListConnection()
 
 void TableListWidget::errorUpdateTablesList()
 {
-    MainWindow::Instance()->setStatusLabelText(
-            MegaTcpSocket::Instance()->errorString());
-    closeUpdateTablesListConnection();
+    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
+    MainWindow::Instance()->setStatusLabelText(tcpSocket->errorString());
+    disconnect(tcpSocket, SIGNAL(connected()),
+               this, SLOT(sendUpdateTablesListRequest()));
+    disconnect(tcpSocket, SIGNAL(readyRead()),
+               this, SLOT(getUpdateTablesListResponse()));
+    disconnect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
+               this, SLOT(errorUpdateTablesList()));
+    disconnect(tcpSocket, SIGNAL(disconnected()),
+               this, SLOT(connectionUpdateTablesListClosedByServer()));
+    updateButton->setEnabled(true);
+    addTableButton->setEnabled(false);
+    viewRecordsButton->setEnabled(false);
+    viewTableButton->setEnabled(false);
+    editTableButton->setEnabled(false);
+    delTableButton->setEnabled(false);
+    tcpSocket->abort();
 }
 
 void TableListWidget::sendUpdateTablesListRequest()
