@@ -84,7 +84,7 @@ sed -i "s/<put author's name and email here>/Alexander O. Anisimov <anisimov2004
 sed -i "s/<likewise for another author>//g" debian/copyright
 sed -i "s/Copyright (C) YYYY Firstname Lastname/Copyright (C) 2010 Alexander O. Anisimov/g" debian/copyright
 
-dpkg-buildpackage 
+dpkg-buildpackage
 #create src
 rm -rf debian
 rm -rf builddir
