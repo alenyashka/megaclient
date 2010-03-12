@@ -32,9 +32,9 @@ RESOURCES += megaclient.qrc
 TRANSLATIONS += l10n/megaclient_ru.ts
 unix { 
     # VARIABLES
-    isEmpty(PREFIX):PREFIX = /opt
-    BINDIR = $$PREFIX
-    DATADIR = $$PREFIX
+    isEmpty(PREFIX):PREFIX = /usr/local
+    BINDIR = $$PREFIX/bin
+    DATADIR = $$PREFIX/share
     DEFINES += DATADIR=\"$$DATADIR\" \
         PKGDATADIR=\"$$PKGDATADIR\"
 
