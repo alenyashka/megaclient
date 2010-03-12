@@ -23,7 +23,7 @@ echo "Build dir: $RELEASEDIR"
 rm -rf $DEPLOYDIR/$PLATFORMDIR/
 
 mkdir -p "$DEPLOYDIR/$PLATFORMDIR"
-git clone ./ $RELEASEDIR
+git checkout-index -f -a --prefix=$RELEASEDIR/
 cd $RELEASEDIR
 
 #sed -i "s/%test-major-version%/$MAJORVERSION/g" version.cpp
