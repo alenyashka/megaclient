@@ -37,7 +37,7 @@ unix {
     DATADIR = $$PREFIX
     DEFINES += DATADIR=\"$$DATADIR\" \
         PKGDATADIR=\"$$PKGDATADIR\"
-    
+
     # MAKE INSTALL
     INSTALLS += target \
         desktop \
