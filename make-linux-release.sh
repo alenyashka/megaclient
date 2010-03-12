@@ -42,6 +42,7 @@ mv src1 src
 mv $APPNAME.pro src/src.pro
 mv *.qrc src
 mv images src
+mv l10n src
 mv $APPNAME.desktop src
 mv changes src
 mv license src
@@ -69,7 +70,7 @@ echo "SUBDIRS  = src" >> $APPNAME.pro
 #echo "su -c pbuilder build ../helloworld_1.0.dsc" >> package.sh
 #chmod +x package.sh
 
-export DEBFULLNAME="Alexander Anisimov"
+export DEBFULLNAME="Alexander O. Anisimov"
 #dh_make -e  eeexception@gmail.com -n -s -c gpl
 dh_make -e anisimov2004@gmail.com --createorig --single -c gpl
 
@@ -79,9 +80,9 @@ mv control debian/control
 mv changelog debian/changelog
 
 sed -i "s/<url:\/\/example.com>/http:\/\/google.com/g" debian/copyright
-sed -i "s/<put author's name and email here>/Alexander Anisimov <anisimov2004@gmail.com>/g" debian/copyright
+sed -i "s/<put author's name and email here>/Alexander O. Anisimov <anisimov2004@gmail.com>/g" debian/copyright
 sed -i "s/<likewise for another author>//g" debian/copyright
-sed -i "s/Copyright (C) YYYY Firstname Lastname/Copyright (C) 2010 Alexander Anisimov/g" debian/copyright
+sed -i "s/Copyright (C) YYYY Firstname Lastname/Copyright (C) 2010 Alexander O. Anisimov/g" debian/copyright
 
 dpkg-buildpackage 
 #create src
