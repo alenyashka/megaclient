@@ -1,8 +1,8 @@
 *~
 *.o
-MegaClient
+megaclient
 Makefile*
-MegaClient.pro.user
+megaclient.pro.user
 .cproject
 .project
 debug

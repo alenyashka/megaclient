@@ -1,7 +1,7 @@
 # -------------------------------------------------
 # Project created by QtCreator 2010-02-18T10:08:33
 # -------------------------------------------------
-TARGET = MegaClient
+TARGET = megaclient
 TEMPLATE = app
 QT += network
 SOURCES += src/main.cpp \
@@ -28,5 +28,29 @@ HEADERS += src/mainwindow.h \
     src/recorddeletewidget.h \
     src/settingswidget.h
 FORMS += 
-RESOURCES += MegaClient.qrc
-TRANSLATIONS += l10n/MegaClient_ru.ts
+RESOURCES += megaclient.qrc
+TRANSLATIONS += l10n/megaclient_ru.ts
+unix { 
+    # VARIABLES
+    isEmpty(PREFIX):PREFIX = /opt
+    BINDIR = $$PREFIX
+    DATADIR = $$PREFIX
+    DEFINES += DATADIR=\"$$DATADIR\" \
+        PKGDATADIR=\"$$PKGDATADIR\"
+    
+    # MAKE INSTALL
+    INSTALLS += target \
+        desktop \
+        pixmaps \
+        icon22 \
+        l10n
+    target.path = $$BINDIR
+    desktop.path = $$DATADIR/applications/
+    desktop.files += $${TARGET}.desktop
+    pixmaps.path = $$DATADIR/pixmaps/
+    pixmaps.files += images/$${TARGET}.png
+    icon22.path = $$DATADIR/icons/hicolor/22x22/apps/
+    icon22.files += images/*.png
+    l10n.path = $$DATADIR/l10n/
+    l10n.files += l10n/*.qm
+}
