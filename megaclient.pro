@@ -14,7 +14,8 @@ SOURCES += src/main.cpp \
     src/recordadedview.cpp \
     src/util.cpp \
     src/recorddeletewidget.cpp \
-    src/settingswidget.cpp
+    src/settingswidget.cpp \
+    src/apppath.cpp
 HEADERS += src/mainwindow.h \
     src/megaprotocol.h \
     src/tablelistwidget.h \
@@ -26,7 +27,8 @@ HEADERS += src/mainwindow.h \
     src/recordadedview.h \
     src/util.h \
     src/recorddeletewidget.h \
-    src/settingswidget.h
+    src/settingswidget.h \
+    src/apppath.h
 FORMS += 
 RESOURCES += megaclient.qrc
 TRANSLATIONS += l10n/megaclient_ru.ts
@@ -37,7 +39,7 @@ unix {
     DATADIR = $$PREFIX/share
     DEFINES += DATADIR=\"$$DATADIR\" \
         PKGDATADIR=\"$$PKGDATADIR\"
-
+    
     # MAKE INSTALL
     INSTALLS += target \
         desktop \

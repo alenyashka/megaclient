@@ -7,6 +7,7 @@
 #include "recordlistwidget.h"
 #include "megatcpsocket.h"
 #include "singleton.h"
+
 class TableListWidget;
 class MainWindow : public QMainWindow, public Singleton<MainWindow>
 {
