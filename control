@@ -1,0 +1,13 @@
+Source: megaclient
+Section: Qt;Network;
+Priority: extra
+Maintainer: Alexander Anisimov <anisimov2004@gmail.com>
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.8.1
+Homepage: http://google.com
+
+Package: megaclient
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Your Mega Client
+ Your Mega Client

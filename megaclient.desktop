@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=MegaClient
+GenericName=Your Mega Client
+Comment=Your Mega Client
+Icon=megaclient
+Exec=megaclient
+MimeType=application
+Categories=Qt;Network;
+Version=1.0
