@@ -29,4 +29,4 @@ HEADERS += src/mainwindow.h \
     src/settingswidget.h
 FORMS += 
 RESOURCES += MegaClient.qrc
-TRANSLATIONS += MegaClient_ru.ts
+TRANSLATIONS += l10n/MegaClient_ru.ts

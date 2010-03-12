@@ -11,7 +11,7 @@
         <file>images/view.png</file>
         <file>images/back.png</file>
     </qresource>
-    <qresource prefix="/translations" >
-        <file>MegaClient_ru.qm</file>
+    <qresource prefix="/l10n" >
+        <file>l10n/MegaClient_ru.qm</file>
     </qresource>
 </RCC>
