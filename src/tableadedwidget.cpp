@@ -202,6 +202,7 @@ void TableAdEdWidget::getResponse()
             tcpSocket->abort();
             okButton->setVisible(false);
             nextBlockSize = 0;
+            break;
         default:
             break;
     }

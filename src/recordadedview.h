@@ -39,6 +39,7 @@ private slots:
     void error();
     void connectionClosedByServer();
     void hideError();
+    void backToTableList();
 private:
     bool isError();
     void closeConnection();
@@ -63,6 +64,7 @@ private:
     QPushButton *okButton;
     QPushButton *cancelButton;
     QPushButton *backButton;
+    QPushButton *backToTableListButton;
     QGroupBox *groupBox;
     quint16 nextBlockSize;
 

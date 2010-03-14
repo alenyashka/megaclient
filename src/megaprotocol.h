@@ -17,7 +17,12 @@ class MegaProtocol {
         TABLE_EXIST,
         TABLE_DELETED,
         RECORD_EXIST,
-        RECORD_IS_READ_ONLY
+        RECORD_IS_READ_ONLY,
+        RECORD_DELETED
+    };
+    enum State {
+        OK,
+        ERROR
     };
 };
 #endif // MEGAPROTOCOL_H

@@ -60,8 +60,10 @@ RecordListWidget::RecordListWidget()
     recordTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     recordTableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 
-    QHBoxLayout *centralLayout = new QHBoxLayout;
+    errorLabel = new QLabel();
+    QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addWidget(recordTableWidget);
+    centralLayout->addWidget(errorLabel);
 
     groupBox = new QGroupBox();
     groupBox->setLayout(centralLayout);
@@ -70,7 +72,6 @@ RecordListWidget::RecordListWidget()
     mainLayout->addWidget(groupBox);
     mainLayout->addLayout(rightLayout);
     setLayout(mainLayout);
-    updateRecordsList();
 }
 
 void RecordListWidget::show(const QString &table)
@@ -79,6 +80,7 @@ void RecordListWidget::show(const QString &table)
     MainWindow::Instance()->setCentralWidget(this);
     MainWindow::Instance()->setStatusLabelText("");
     groupBox->setTitle(tr("Table: [%1]").arg(tableName));
+    errorLabel->setVisible(false);
     updateRecordsList();
 }
 
@@ -162,59 +164,82 @@ void RecordListWidget::getUpdateRecordsListResponse()
     MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
     QDataStream in(tcpSocket);
     in.setVersion(QDataStream::Qt_4_5);
-    forever
+    uint state;
+    in >> state;
+    if (state == MegaProtocol::OK)
     {
-        int row = recordTableWidget->rowCount();
-        if (nextBlockSize == 0)
+        forever
         {
-            if (tcpSocket->bytesAvailable() < sizeof(quint16)) break;
-            in >> nextBlockSize;
-        }
-        if (nextBlockSize == 0xFFFF)
-        {
-            closeUpdateRecordsListConnection();
-            MainWindow::Instance()->setStatusLabelText(
-                    tr("Receipt %1 record(s)").arg(row));
-            break;
-        }
-        if (tcpSocket->bytesAvailable() < nextBlockSize) break;
-        QString title;
-        QString comment;
-        bool readOnly;
-        QVariant::Type type;
-        QVariant value;
-        in >> title >> comment >> readOnly >> type >> value;
-        recordTableWidget->setRowCount(row + 1);
+            int row = recordTableWidget->rowCount();
+            if (nextBlockSize == 0)
+            {
+                if (tcpSocket->bytesAvailable() < sizeof(quint16)) break;
+                in >> nextBlockSize;
+            }
+            if (nextBlockSize == 0xFFFF)
+            {
+                closeUpdateRecordsListConnection();
+                MainWindow::Instance()->setStatusLabelText(
+                        tr("Receipt %1 record(s)").arg(row));
+                break;
+            }
+            if (tcpSocket->bytesAvailable() < nextBlockSize) break;
+            QString title;
+            QString comment;
+            bool readOnly;
+            QVariant::Type type;
+            QVariant value;
+            in >> title >> comment >> readOnly >> type >> value;
+            recordTableWidget->setRowCount(row + 1);
 
-        recordTableWidget->setItem(row, 0, new QTableWidgetItem(title));
-        recordTableWidget->setItem(row, 1, new QTableWidgetItem(comment));
-        QTableWidgetItem *item = new QTableWidgetItem();
-        item->setTextAlignment(Qt::AlignCenter);
-        item->data(Qt::CheckStateRole);
-        item->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        if (readOnly)
-        {
-            item->setCheckState(Qt::Checked);
+            recordTableWidget->setItem(row, 0, new QTableWidgetItem(title));
+            recordTableWidget->setItem(row, 1, new QTableWidgetItem(comment));
+            QTableWidgetItem *item = new QTableWidgetItem();
+            item->setTextAlignment(Qt::AlignCenter);
+            item->data(Qt::CheckStateRole);
+            item->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+            if (readOnly)
+            {
+                item->setCheckState(Qt::Checked);
+            }
+            else
+            {
+                item->setCheckState(Qt::Unchecked);
+            }
+            recordTableWidget->setItem(row, 2, item);
+            item = new QTableWidgetItem();
+            QString t = type == QVariant::Double ? "Double" :
+                        type == QVariant::Int ? "Int" : "String";
+            item->setText(t);
+            item->setData(Qt::UserRole, type);
+            recordTableWidget->setItem(row, 3, item);
+            item = new QTableWidgetItem();
+            item->setText(value.toString());
+            item->setData(Qt::UserRole, value);
+            recordTableWidget->setItem(row, 4, item);
+            nextBlockSize = 0;
         }
-        else
-        {
-            item->setCheckState(Qt::Unchecked);
-        }
-        recordTableWidget->setItem(row, 2, item);
-        item = new QTableWidgetItem();
-        QString t = type == QVariant::Double ? "Double" :
-                    type == QVariant::Int ? "Int" : "String";
-        item->setText(t);
-        item->setData(Qt::UserRole, type);
-        recordTableWidget->setItem(row, 3, item);
-        item = new QTableWidgetItem();
-        item->setText(value.toString());
-        item->setData(Qt::UserRole, value);
-        recordTableWidget->setItem(row, 4, item);
-        nextBlockSize = 0;
+        recordTableWidget->resizeColumnsToContents();
+        recordTableWidget->resizeRowsToContents();
     }
-    recordTableWidget->resizeColumnsToContents();
-    recordTableWidget->resizeRowsToContents();
+    else
+    {
+        recordTableWidget->setVisible(false);
+        viewRecordButton->setVisible(false);
+        addRecordButton->setVisible(false);
+        editRecordButton->setVisible(false);
+        delRecordButton->setVisible(false);
+        uint err;
+        in >> err;
+        switch (err)
+        {
+            case MegaProtocol::TABLE_DELETED:
+                showError(tr("This table is already deleted"));
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 void RecordListWidget::backToTableList()
@@ -267,4 +292,11 @@ void RecordListWidget::delRecord()
         QString title = recordTableWidget->item(row, 0)->text();
         RecordDeleteWidget::Instance()->show(this->tableName, title);
     }
+}
+
+void RecordListWidget::showError(const QString &error)
+{
+    errorLabel->setText(QString("<font color=red>").append(error)
+                        .append("</font>"));
+    errorLabel->setVisible(true);
 }

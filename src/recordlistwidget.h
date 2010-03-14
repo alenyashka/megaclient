@@ -30,6 +30,7 @@ private slots:
     void editRecord();
     void delRecord();
 private:
+    void showError(const QString&);
     void closeUpdateRecordsListConnection();
     QString tableName;
     QPushButton *backButton;
@@ -38,6 +39,7 @@ private:
     QPushButton *editRecordButton;
     QPushButton *delRecordButton;
     QTableWidget *recordTableWidget;
+    QLabel *errorLabel;
     QGroupBox *groupBox;
     quint16 nextBlockSize;
 };

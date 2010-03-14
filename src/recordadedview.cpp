@@ -17,6 +17,12 @@ RecordAdEdView::RecordAdEdView()
     backButton->setIcon(QIcon(":/images/back.png"));
     connect(backButton, SIGNAL(clicked()), this, SLOT(cancel()));
 
+    backToTableListButton = new QPushButton(tr("Back"));
+    backToTableListButton->setStatusTip(tr("Back to table's list"));
+    backToTableListButton->setIcon(QIcon(":/images/back.png"));
+    connect(backToTableListButton, SIGNAL(clicked()),
+            this, SLOT(backToTableList()));
+
     titleLabel = new QLabel(tr("Title:"));
     errorTitleLabel = new QLabel();
     errorTitleLabel->setVisible(false);
@@ -74,6 +80,7 @@ RecordAdEdView::RecordAdEdView()
     buttonLayout->addWidget(okButton);
     buttonLayout->addWidget(cancelButton);
     buttonLayout->addWidget(backButton);
+    buttonLayout->addWidget(backToTableListButton);
     buttonLayout->addSpacerItem(new QSpacerItem(220, 20, QSizePolicy::Fixed,
                                                 QSizePolicy::Fixed));
     buttonLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
@@ -195,6 +202,24 @@ void RecordAdEdView::getResponse()
             okButton->setEnabled(true);
             nextBlockSize = 0;
             break;
+        case MegaProtocol::RECORD_DELETED:
+            showError(tr("This record is already deleted"));
+            tcpSocket->abort();
+            okButton->setVisible(false);
+            cancelButton->setVisible(false);
+            backToTableListButton->setVisible(false);
+            backButton->setVisible(true);
+            nextBlockSize = 0;
+            break;
+        case MegaProtocol::TABLE_DELETED:
+            showError(tr("Table with this record is already deleted"));
+            tcpSocket->abort();
+            okButton->setVisible(false);
+            cancelButton->setVisible(false);
+            backButton->setVisible(false);
+            backToTableListButton->setVisible(true);
+            nextBlockSize = 0;
+            break;
         default:
             break;
     }
@@ -270,6 +295,7 @@ void RecordAdEdView::show(const QString &table,
             okButton->setVisible(true);
             cancelButton->setVisible(true);
             backButton->setVisible(false);
+            backToTableListButton->setVisible(false);
             break;
     }
 
@@ -288,6 +314,7 @@ void RecordAdEdView::viewMode()
     valueLineEdit->setReadOnly(true);
     okButton->setVisible(false);
     cancelButton->setVisible(false);
+    backToTableListButton->setVisible(false);
     backButton->setVisible(true);
 }
 
@@ -327,4 +354,9 @@ void RecordAdEdView::setValidatorComboBoxCurrentIndexChanged(const int &index)
 void RecordAdEdView::hideError()
 {
     errorTitleLabel->setVisible(false);
+}
+
+void RecordAdEdView::backToTableList()
+{
+    TableListWidget::Instance()->show();
 }
