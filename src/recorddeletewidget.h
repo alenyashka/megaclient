@@ -22,6 +22,7 @@ private slots:
     void getResponse();
     void error();
     void connectionClosedByServer();
+    void backToTableList();
 private:
     void showError(const QString&);
     void closeConnection();
@@ -30,6 +31,8 @@ private:
     QGroupBox *groupBox;
     QPushButton *yesButton;
     QPushButton *noButton;
+    QPushButton *backButton;
+    QPushButton *backToTableListButton;
     QLabel *titleLabel;
     QLabel *messageLabel;
     QLabel *errorLabel;

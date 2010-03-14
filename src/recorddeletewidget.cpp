@@ -8,17 +8,29 @@ RecordDeleteWidget::RecordDeleteWidget()
     connect(yesButton, SIGNAL(clicked()), this, SLOT(yes()));
 
     noButton = new QPushButton(tr("No"));
-    noButton->setToolTip(tr("Cancel the operation"));
+    noButton->setStatusTip(tr("Cancel the operation"));
     noButton->setIcon(QIcon(":/images/cancel.png"));
     connect(noButton, SIGNAL(clicked()), this, SLOT(cancel()));
 
+    backButton = new QPushButton(tr("Back"));
+    backButton->setStatusTip(tr("Back to record's list"));
+    backButton->setIcon(QIcon(":images/back.png"));
+    connect(backButton, SIGNAL(clicked()), this, SLOT(cancel()));
+
+    backToTableListButton = new QPushButton(tr("Back"));
+    backToTableListButton->setStatusTip(tr("Back to table's list"));
+    backToTableListButton->setIcon(QIcon(":images/back.png"));
+    connect(backToTableListButton, SIGNAL(clicked()),
+            this, SLOT(backToTableList()));
+
     messageLabel = new QLabel();
     errorLabel = new QLabel();
-    errorLabel->setVisible(false);
 
     QVBoxLayout *buttonLayout = new QVBoxLayout;
     buttonLayout->addWidget(yesButton);
     buttonLayout->addWidget(noButton);
+    buttonLayout->addWidget(backButton);
+    buttonLayout->addWidget(backToTableListButton);
     buttonLayout->addSpacerItem(new QSpacerItem(220, 20, QSizePolicy::Fixed,
                                                 QSizePolicy::Fixed));
     buttonLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
@@ -50,6 +62,9 @@ void RecordDeleteWidget::show(const QString &name,
     messageLabel->setText(tr("Now record %1 will be deleted from table %2.\n"
                              "This action can not be reverted.\n"
                              "Do you agree?").arg(title).arg(name));
+    errorLabel->setVisible(false);
+    backButton->setVisible(false);
+    backToTableListButton->setVisible(false);
 }
 
 void RecordDeleteWidget::cancel()
@@ -93,32 +108,42 @@ void RecordDeleteWidget::getResponse()
     MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
     QDataStream in(tcpSocket);
     in.setVersion(QDataStream::Qt_4_5);
-
-    if (nextBlockSize == 0)
+    uint status;
+    in >> status;
+    if (status == MegaProtocol::OK)
     {
-        if (tcpSocket->bytesAvailable() < sizeof(quint16)) return;
         in >> nextBlockSize;
-    }
-    if (nextBlockSize == 0xFFFF)
-    {
         closeConnection();
         MainWindow::Instance()->setStatusLabelText(
                 tr("Record deleted successfully"));
-        return;
     }
-    uint err;
-    in >> err;
-    switch (err)
+    else
     {
-        case MegaProtocol::RECORD_IS_READ_ONLY:
-            showError(tr("This record is read only"));
-            tcpSocket->abort();
-            nextBlockSize = 0;
-            yesButton->setEnabled(true);
-            noButton->setEnabled(true);
-            break;
-        default:
-            break;
+        uint err;
+        in >> err;
+        switch (err)
+        {
+            case MegaProtocol::RECORD_DELETED:
+                showError(tr("This record is already deleted"));
+                tcpSocket->abort();
+                nextBlockSize = 0;
+                yesButton->setVisible(false);
+                noButton->setVisible(false);
+                backToTableListButton->setVisible(false);
+                backButton->setVisible(true);
+                break;
+            case MegaProtocol::TABLE_DELETED:
+                showError(tr("Table with this table is already deleted"));
+                tcpSocket->abort();
+                yesButton->setVisible(false);
+                noButton->setVisible(false);
+                backButton->setVisible(false);
+                backToTableListButton->setVisible(true);
+                break;
+            default:
+                break;
+        }
+        in >> nextBlockSize;
     }
 }
 
@@ -159,4 +184,9 @@ void RecordDeleteWidget::closeConnection()
                this, SLOT(connectionClosedByServer()));
     tcpSocket->abort();
     RecordListWidget::Instance()->show(this->tableName);
+}
+
+void RecordDeleteWidget::backToTableList()
+{
+    TableListWidget::Instance()->show();
 }
