@@ -166,14 +166,11 @@ void RecordAdEdView::getResponse()
     MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
     QDataStream in(tcpSocket);
     in.setVersion(QDataStream::Qt_4_5);
-
-    if (nextBlockSize == 0)
+    uint status;
+    in >> status;
+    if (status == MegaProtocol::OK)
     {
-        if (tcpSocket->bytesAvailable() < sizeof(quint16)) return;
         in >> nextBlockSize;
-    }
-    if (nextBlockSize == 0xFFFF)
-    {
         closeConnection();
         QString success;
         switch (mode)
@@ -190,38 +187,42 @@ void RecordAdEdView::getResponse()
         MainWindow::Instance()->setStatusLabelText(success);
         return;
     }
-    uint err;
-    in >> err;
-    switch (err)
+    else
     {
-        case MegaProtocol::RECORD_EXIST:
-            showError(tr("Record with this title already exist"));
-            titleLineEdit->selectAll();
-            titleLineEdit->setFocus();
-            tcpSocket->abort();
-            okButton->setEnabled(true);
-            nextBlockSize = 0;
-            break;
-        case MegaProtocol::RECORD_DELETED:
-            showError(tr("This record is already deleted"));
-            tcpSocket->abort();
-            okButton->setVisible(false);
-            cancelButton->setVisible(false);
-            backToTableListButton->setVisible(false);
-            backButton->setVisible(true);
-            nextBlockSize = 0;
-            break;
-        case MegaProtocol::TABLE_DELETED:
-            showError(tr("Table with this record is already deleted"));
-            tcpSocket->abort();
-            okButton->setVisible(false);
-            cancelButton->setVisible(false);
-            backButton->setVisible(false);
-            backToTableListButton->setVisible(true);
-            nextBlockSize = 0;
-            break;
-        default:
-            break;
+        uint err;
+        in >> err;
+        switch (err)
+        {
+            case MegaProtocol::RECORD_EXIST:
+                showError(tr("Record with this title already exist"));
+                titleLineEdit->selectAll();
+                titleLineEdit->setFocus();
+                tcpSocket->abort();
+                okButton->setEnabled(true);
+                nextBlockSize = 0;
+                break;
+            case MegaProtocol::RECORD_DELETED:
+                showError(tr("This record is already deleted"));
+                tcpSocket->abort();
+                okButton->setVisible(false);
+                cancelButton->setVisible(false);
+                backToTableListButton->setVisible(false);
+                backButton->setVisible(true);
+                nextBlockSize = 0;
+                break;
+            case MegaProtocol::TABLE_DELETED:
+                showError(tr("Table with this record is already deleted"));
+                tcpSocket->abort();
+                okButton->setVisible(false);
+                cancelButton->setVisible(false);
+                backButton->setVisible(false);
+                backToTableListButton->setVisible(true);
+                nextBlockSize = 0;
+                break;
+            default:
+                break;
+        }
+        in >> nextBlockSize;
     }
 }
 
