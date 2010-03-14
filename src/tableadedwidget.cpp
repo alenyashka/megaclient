@@ -195,6 +195,13 @@ void TableAdEdWidget::getResponse()
             okButton->setEnabled(true);
             nextBlockSize = 0;
             break;
+        case MegaProtocol::TABLE_DELETED:
+            showError(tr("This table is already deleted"));
+            nameLineEdit->selectAll();
+            nameLineEdit->setFocus();
+            tcpSocket->abort();
+            okButton->setVisible(false);
+            nextBlockSize = 0;
         default:
             break;
     }
