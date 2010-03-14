@@ -284,11 +284,6 @@ void RecordAdEdView::show(const QString &table,
             break;
         case EditMode:
             groupBox->setTitle(tr("Edit record"));
-            if (readOnly)
-            {
-                viewMode();
-                break;
-            }
         case AddMode:
             groupBox->setTitle(tr("Add record"));
             connect(typeComboBox, SIGNAL(currentIndexChanged(int)),
