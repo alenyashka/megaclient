@@ -133,7 +133,7 @@ void RecordDeleteWidget::getResponse()
                 backButton->setVisible(true);
                 break;
             case MegaProtocol::TABLE_DELETED:
-                showError(tr("Table with this table is already deleted"));
+                showError(tr("Table with this record is already deleted"));
                 tcpSocket->abort();
                 yesButton->setVisible(false);
                 noButton->setVisible(false);
