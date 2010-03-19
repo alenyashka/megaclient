@@ -25,18 +25,16 @@ private slots:
     void errorUpdateRecordsList();
     void connectionUpdateRecordsListClosedByServer();
     void backToTableList();
-    void viewRecord();
     void addRecord();
-    void editRecord();
+    void propRecord();
     void delRecord();
 private:
     void showError(const QString&);
     void closeUpdateRecordsListConnection();
     QString tableName;
     QPushButton *backButton;
-    QPushButton *viewRecordButton;
     QPushButton *addRecordButton;
-    QPushButton *editRecordButton;
+    QPushButton *propRecordButton;
     QPushButton *delRecordButton;
     QTableWidget *recordTableWidget;
     QLabel *errorLabel;

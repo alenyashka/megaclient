@@ -8,23 +8,17 @@ RecordListWidget::RecordListWidget()
     connect(backButton, SIGNAL(clicked()),
             this, SLOT(backToTableList()));
 
-    viewRecordButton = new QPushButton(tr("View record"));
-    viewRecordButton->setStatusTip(tr("View current record"));
-    viewRecordButton->setShortcut(tr("Ctrl+Alt+V"));
-    viewRecordButton->setIcon(QIcon(":images/view.png"));
-    connect(viewRecordButton, SIGNAL(clicked()), this, SLOT(viewRecord()));
-
     addRecordButton = new QPushButton(tr("Add record"));
     addRecordButton->setStatusTip(tr("Add record to the table"));
     addRecordButton->setShortcut(tr("Ctrl+Alt+A"));
     addRecordButton->setIcon(QIcon(":images/add.png"));
     connect(addRecordButton, SIGNAL(clicked()), this, SLOT(addRecord()));
 
-    editRecordButton = new QPushButton(tr("Edit record"));
-    editRecordButton->setStatusTip(tr("Edit current record"));
-    editRecordButton->setShortcut(tr("Ctrl+Alt+E"));
-    editRecordButton->setIcon(QIcon(":/images/edit.png"));
-    connect(editRecordButton, SIGNAL(clicked()), this, SLOT(editRecord()));
+    propRecordButton = new QPushButton(tr("Record's properties"));
+    propRecordButton->setStatusTip(tr("View or edit current record"));
+    propRecordButton->setShortcut(tr("Ctrl+Alt+P"));
+    propRecordButton->setIcon(QIcon(":/images/edit.png"));
+    connect(propRecordButton, SIGNAL(clicked()), this, SLOT(propRecord()));
 
     delRecordButton = new QPushButton(tr("Delete record"));
     delRecordButton->setStatusTip(tr("Delete current record from the list"));
@@ -33,9 +27,8 @@ RecordListWidget::RecordListWidget()
     connect(delRecordButton, SIGNAL(clicked()), this, SLOT(delRecord()));
 
     QVBoxLayout *rightLayout = new QVBoxLayout;
-    rightLayout->addWidget(viewRecordButton);
     rightLayout->addWidget(addRecordButton);
-    rightLayout->addWidget(editRecordButton);
+    rightLayout->addWidget(propRecordButton);
     rightLayout->addWidget(delRecordButton);
     rightLayout->addWidget(backButton);
     rightLayout->addSpacerItem(new QSpacerItem(220, 20, QSizePolicy::Fixed,
@@ -60,7 +53,7 @@ RecordListWidget::RecordListWidget()
     recordTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     recordTableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     connect(recordTableWidget, SIGNAL(doubleClicked(QModelIndex)),
-            this, SLOT(editRecord()));
+            this, SLOT(propRecord()));
 
     errorLabel = new QLabel();
     QVBoxLayout *centralLayout = new QVBoxLayout;
@@ -97,9 +90,8 @@ void RecordListWidget::updateRecordsList()
             this, SLOT(errorUpdateRecordsList()));
     connect(tcpSocket, SIGNAL(disconnected()),
             this, SLOT(connectionUpdateRecordsListClosedByServer()));
-    viewRecordButton->setEnabled(false);
     addRecordButton->setEnabled(false);
-    editRecordButton->setEnabled(false);
+    propRecordButton->setEnabled(false);
     delRecordButton->setEnabled(false);
     tcpSocket->abort();
     tcpSocket->connectToHost();
@@ -133,8 +125,7 @@ void RecordListWidget::closeUpdateRecordsListConnection()
     if (recordTableWidget->rowCount() > 0)
     {
         recordTableWidget->selectRow(0);
-        viewRecordButton->setEnabled(true);
-        editRecordButton->setEnabled(true);
+        propRecordButton->setEnabled(true);
         delRecordButton->setEnabled(true);
     }
     tcpSocket->abort();
@@ -227,9 +218,8 @@ void RecordListWidget::getUpdateRecordsListResponse()
     else
     {
         recordTableWidget->setVisible(false);
-        viewRecordButton->setVisible(false);
         addRecordButton->setVisible(false);
-        editRecordButton->setVisible(false);
+        propRecordButton->setVisible(false);
         delRecordButton->setVisible(false);
         uint err;
         in >> err;
@@ -249,28 +239,12 @@ void RecordListWidget::backToTableList()
     TableListWidget::Instance()->show();
 }
 
-void RecordListWidget::viewRecord()
-{
-    int row = recordTableWidget->currentRow();
-    if (!(row < 0))
-    {
-        QString title = recordTableWidget->item(row, 0)->text();
-        QString comment = recordTableWidget->item(row, 1)->text();
-        bool readOnly = recordTableWidget->item(row, 2)->checkState();
-        QVariant::Type type = recordTableWidget->item(row ,3)->data(
-                Qt::UserRole).type();
-        QVariant value = recordTableWidget->item(row, 4)->data(Qt::UserRole);
-        RecordAdEdView::Instance()->show(tableName, RecordAdEdView::ViewMode,
-                                         title, comment, readOnly, type, value);
-    }
-}
-
 void RecordListWidget::addRecord()
 {
     RecordAdEdView::Instance()->show(tableName, RecordAdEdView::AddMode);
 }
 
-void RecordListWidget::editRecord()
+void RecordListWidget::propRecord()
 {
     int row = recordTableWidget->currentRow();
     if (!(row < 0))
