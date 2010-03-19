@@ -31,7 +31,7 @@ TableListWidget::TableListWidget()
     addTableButton->setIcon(QIcon(":images/add.png"));
     connect(addTableButton, SIGNAL(clicked()), this, SLOT(addTable()));
 
-    propTableButton = new QPushButton(tr("Table properties"));
+    propTableButton = new QPushButton(tr("Table's properties"));
     propTableButton->setStatusTip(tr("View or edit property of current tabel"));
     propTableButton->setShortcut(tr("Ctrl+Alt+P"));
     propTableButton->setIcon(QIcon(":/images/edit.png"));
