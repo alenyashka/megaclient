@@ -59,6 +59,8 @@ RecordListWidget::RecordListWidget()
     recordTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     recordTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     recordTableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    connect(recordTableWidget, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(editRecord()));
 
     errorLabel = new QLabel();
     QVBoxLayout *centralLayout = new QVBoxLayout;

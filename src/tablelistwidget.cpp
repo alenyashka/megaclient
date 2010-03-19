@@ -75,6 +75,8 @@ TableListWidget::TableListWidget()
     tableTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tableTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     tableTableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    connect(tableTableWidget, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(viewRecords()));
 
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(tableTableWidget);
