@@ -20,12 +20,6 @@ TableListWidget::TableListWidget()
     connect(quitButton, SIGNAL(clicked()),
             MainWindow::Instance(), SLOT(close()));
 
-    viewTableButton = new QPushButton(tr("View table"));
-    viewTableButton->setStatusTip(tr("View selected table"));
-    viewTableButton->setShortcut(tr("Ctrl+Alt+V"));
-    viewTableButton->setIcon(QIcon(":images/view.png"));
-    connect(viewTableButton, SIGNAL(clicked()), this, SLOT(viewTable()));
-
     viewRecordsButton = new QPushButton(tr("View records"));
     viewRecordsButton->setStatusTip(tr("View records of selected tables"));
     viewRecordsButton->setIcon(QIcon(":images/view.png"));
@@ -37,11 +31,11 @@ TableListWidget::TableListWidget()
     addTableButton->setIcon(QIcon(":images/add.png"));
     connect(addTableButton, SIGNAL(clicked()), this, SLOT(addTable()));
 
-    editTableButton = new QPushButton(tr("Edit table"));
-    editTableButton->setStatusTip(tr("Edit current tabel"));
-    editTableButton->setShortcut(tr("Ctrl+Alt+E"));
-    editTableButton->setIcon(QIcon(":/images/edit.png"));
-    connect(editTableButton, SIGNAL(clicked()), this, SLOT(editTable()));
+    propTableButton = new QPushButton(tr("Table properties"));
+    propTableButton->setStatusTip(tr("View or edit property of current tabel"));
+    propTableButton->setShortcut(tr("Ctrl+Alt+P"));
+    propTableButton->setIcon(QIcon(":/images/edit.png"));
+    connect(propTableButton, SIGNAL(clicked()), this, SLOT(propTable()));
 
     delTableButton = new QPushButton(tr("Delete table"));
     delTableButton->setStatusTip(tr("Delete current tabel from the list"));
@@ -51,9 +45,8 @@ TableListWidget::TableListWidget()
 
     QVBoxLayout *rightLayout = new QVBoxLayout;
     rightLayout->addWidget(viewRecordsButton);
-    rightLayout->addWidget(viewTableButton);
     rightLayout->addWidget(addTableButton);
-    rightLayout->addWidget(editTableButton);
+    rightLayout->addWidget(propTableButton);
     rightLayout->addWidget(delTableButton);
     rightLayout->addWidget(updateButton);
     rightLayout->addWidget(settingsButton);
@@ -105,10 +98,9 @@ void TableListWidget::updateTablesList()
     tcpSocket->connectToHost();
     tableTableWidget->setRowCount(0);
     updateButton->setEnabled(false);
-    viewTableButton->setEnabled(false);
     viewRecordsButton->setEnabled(false);
     addTableButton->setEnabled(false);
-    editTableButton->setEnabled(false);
+    propTableButton->setEnabled(false);
     delTableButton->setEnabled(false);
     MainWindow::Instance()->setStatusLabelText(tr("Connecting to server..."));
     nextBlockSize = 0;
@@ -141,8 +133,7 @@ void TableListWidget::closeUpdateTablesListConnection()
     {
         tableTableWidget->selectRow(0);
         viewRecordsButton->setEnabled(true);
-        viewTableButton->setEnabled(true);
-        editTableButton->setEnabled(true);
+        propTableButton->setEnabled(true);
         delTableButton->setEnabled(true);
     }
     tcpSocket->abort();
@@ -163,8 +154,7 @@ void TableListWidget::errorUpdateTablesList()
     updateButton->setEnabled(true);
     addTableButton->setEnabled(false);
     viewRecordsButton->setEnabled(false);
-    viewTableButton->setEnabled(false);
-    editTableButton->setEnabled(false);
+    propTableButton->setEnabled(false);
     delTableButton->setEnabled(false);
     tcpSocket->abort();
 }
@@ -226,18 +216,6 @@ void TableListWidget::viewRecords()
     }
 }
 
-void TableListWidget::viewTable()
-{
-    int row = tableTableWidget->currentRow();
-    if (!(row < 0))
-    {
-        QString name = tableTableWidget->item(row, 0)->text();
-        QString comment = tableTableWidget->item(row, 1)->text();
-        TableAdEdWidget::Instance()->show(TableAdEdWidget::ViewMode,
-                                          name, comment);
-    }
-}
-
 void TableListWidget::show()
 {
     MainWindow::Instance()->setCentralWidget(this);
@@ -250,7 +228,7 @@ void TableListWidget::addTable()
     TableAdEdWidget::Instance()->show(TableAdEdWidget::AddMode);
 }
 
-void TableListWidget::editTable()
+void TableListWidget::propTable()
 {
     int row = tableTableWidget->currentRow();
     if (!(row < 0))

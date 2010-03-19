@@ -26,9 +26,8 @@ private slots:
     void errorUpdateTablesList();
     void connectionUpdateTablesListClosedByServer();
     void viewRecords();
-    void viewTable();
     void addTable();
-    void editTable();
+    void propTable();
     void delTable();
     void settings();
 private:
@@ -36,13 +35,11 @@ private:
     QPushButton *updateButton;
     QPushButton *settingsButton;
     QPushButton *quitButton;
-    QPushButton *viewTableButton;
     QPushButton *viewRecordsButton;
     QPushButton *addTableButton;
-    QPushButton *editTableButton;
+    QPushButton *propTableButton;
     QPushButton *delTableButton;
     QTableWidget *tableTableWidget;
-//    QLabel *titleLabel;
     QGroupBox *groupBox;
     quint16 nextBlockSize;
 };
