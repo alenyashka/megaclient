@@ -1,6 +1,10 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
 
+#include <QMutex>
+
+static QMutex mutex;
+
 template <class T> class Singleton
 {
     static T *_self;
@@ -11,8 +15,10 @@ protected:
 public:
     static T* Instance()
     {
+        mutex.lock();
         if (!_self) _self = new T;
         _refcount++;
+        mutex.unlock();
         return _self;
     }
     void FreeInst()
