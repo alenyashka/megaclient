@@ -282,7 +282,7 @@ void RecordAdEdView::show(const QString &table,
     {
         this->mode = ViewMode;
     }
-    switch (mode)
+    switch (this->mode)
     {
         case EditValueMode:
             viewMode();
