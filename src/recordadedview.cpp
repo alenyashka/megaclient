@@ -142,6 +142,7 @@ void RecordAdEdView::sendRequest()
         case AddMode:
             out << MegaProtocol::ADD_RECORD << this->table;
             break;
+        case EditValueMode:
         case EditMode:
             out << MegaProtocol::EDIT_RECORD << this->table << this->oldTitle;
             break;
@@ -276,16 +277,26 @@ void RecordAdEdView::show(const QString &table,
     setValidatorComboBoxCurrentIndexChanged(typeComboBox->currentIndex());
     valueLineEdit->setText(value.toString());
     this->mode = mode;
+    groupBox->setTitle(tr("Properties"));
+    if ((this->mode == EditValueMode) && readOnly)
+    {
+        this->mode = ViewMode;
+    }
     switch (mode)
     {
+        case EditValueMode:
+            viewMode();
+            valueLineEdit->setReadOnly(false);
+            okButton->setVisible(true);
+            cancelButton->setVisible(true);
+            backButton->setVisible(false);
+            break;
         case ViewMode:
             viewMode();
-            groupBox->setTitle(tr("View record"));
             break;
-        case EditMode:
-            groupBox->setTitle(tr("Edit record"));
         case AddMode:
             groupBox->setTitle(tr("Add record"));
+        case EditMode:
             connect(typeComboBox, SIGNAL(currentIndexChanged(int)),
                     this, SLOT(setValidatorComboBoxCurrentIndexChanged(int)));
             okButton->setVisible(true);

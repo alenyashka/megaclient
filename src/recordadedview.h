@@ -15,7 +15,7 @@ class RecordAdEdView : public QWidget, public Singleton<RecordAdEdView>
 public:
     enum Mode
     {
-        ViewMode, AddMode, EditMode
+        ViewMode, AddMode, EditMode, EditValueMode
     };
 protected:
     RecordAdEdView();

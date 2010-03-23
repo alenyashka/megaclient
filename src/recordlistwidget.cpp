@@ -268,7 +268,7 @@ void RecordListWidget::propRecord()
         QVariant value = recordTableWidget->item(row, 4)->data(Qt::UserRole);
         RecordAdEdView::Mode mode = MegaGuard::Instance()->getMode() == Admin
                                     ? RecordAdEdView::EditMode
-                                    : RecordAdEdView::ViewMode;
+                                    : RecordAdEdView::EditValueMode;
         RecordAdEdView::Instance()->show(tableName, mode,
                                          title, comment, readOnly, type, value);
     }
