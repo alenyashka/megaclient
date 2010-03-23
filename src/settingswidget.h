@@ -6,6 +6,7 @@
 #include "singleton.h"
 #include "megatcpsocket.h"
 #include "tablelistwidget.h"
+#include "megaguard.h"
 
 class SettingsWidget : public QWidget, public Singleton<SettingsWidget>
 {
@@ -24,8 +25,10 @@ private:
     QGroupBox *groupBox;
     QLabel *hostLabel;
     QLabel *portLabel;
+    QLabel *passLabel;
     QLineEdit *hostLineEdit;
     QLineEdit *portLineEdit;
+    QLineEdit *passLineEdit;
 };
 
 #endif // SETTINGSWIDGET_H

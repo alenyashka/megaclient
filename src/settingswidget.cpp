@@ -14,6 +14,7 @@ SettingsWidget::SettingsWidget()
 
     hostLabel = new QLabel(tr("Host:"));
     portLabel = new QLabel(tr("Port:"));
+    passLabel = new QLabel(tr("Administartor's password:"));
 
     hostLineEdit = new QLineEdit();
     QRegExp regexp("([\\w\\d\\-]+(\\.[\\w\\d\\-]+)+)");
@@ -21,6 +22,9 @@ SettingsWidget::SettingsWidget()
 
     portLineEdit = new QLineEdit();
     portLineEdit->setValidator(new QIntValidator(0, 65535, portLineEdit));
+
+    passLineEdit = new QLineEdit();
+    passLineEdit->setEchoMode(QLineEdit::Password);
 
     QVBoxLayout *buttonLayout = new QVBoxLayout;
     buttonLayout->addWidget(okButton);
@@ -35,6 +39,8 @@ SettingsWidget::SettingsWidget()
     groupLayout->addWidget(hostLineEdit);
     groupLayout->addWidget(portLabel);
     groupLayout->addWidget(portLineEdit);
+    groupLayout->addWidget(passLabel);
+    groupLayout->addWidget(passLineEdit);
     groupLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                QSizePolicy::Expanding));
     groupBox = new QGroupBox(tr("Settings"));
@@ -52,6 +58,7 @@ void SettingsWidget::show()
     MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
     hostLineEdit->setText(QVariant(tcpSocket->getHost()).toString());
     portLineEdit->setText(QVariant(tcpSocket->getPort()).toString());
+    passLineEdit->setText(MegaGuard::Instance()->getPassword());
     MainWindow::Instance()->setCentralWidget(this);
 }
 
@@ -60,6 +67,7 @@ void SettingsWidget::ok()
     MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
     tcpSocket->setHost(hostLineEdit->text());
     tcpSocket->setPort(QVariant(portLineEdit->text()).toUInt());
+    MegaGuard::Instance()->setPassword(passLineEdit->text());
     MainWindow::Instance()->writeSettings();
     TableListWidget::Instance()->show();
 }

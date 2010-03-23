@@ -10,6 +10,7 @@
 #include "tableadedwidget.h"
 #include "tabledeletewidget.h"
 #include "settingswidget.h"
+#include "megaguardwidget.h"
 
 class TableListWidget : public QWidget, public Singleton<TableListWidget>
 {
@@ -30,6 +31,7 @@ private slots:
     void propTable();
     void delTable();
     void settings();
+    void changeMode();
 private:
     void closeUpdateTablesListConnection();
     QPushButton *updateButton;
@@ -39,6 +41,7 @@ private:
     QPushButton *addTableButton;
     QPushButton *propTableButton;
     QPushButton *delTableButton;
+    QPushButton *changeModeButton;
     QTableWidget *tableTableWidget;
     QGroupBox *groupBox;
     quint16 nextBlockSize;

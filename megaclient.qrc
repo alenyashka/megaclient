@@ -12,6 +12,7 @@
         <file>images/back.png</file>
         <file>images/offline.png</file>
         <file>images/online.png</file>
+        <file>images/key.png</file>
     </qresource>
     <qresource prefix="/l10n" >
         <file>l10n/megaclient_ru.qm</file>

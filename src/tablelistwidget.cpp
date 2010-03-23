@@ -43,12 +43,17 @@ TableListWidget::TableListWidget()
     delTableButton->setIcon(QIcon(":/images/del.png"));
     connect(delTableButton, SIGNAL(clicked()), this, SLOT(delTable()));
 
+    changeModeButton = new QPushButton;
+    changeModeButton->setIcon(QIcon(":/images/key.png"));
+    connect(changeModeButton, SIGNAL(clicked()), this, SLOT(changeMode()));
+
     QVBoxLayout *rightLayout = new QVBoxLayout;
     rightLayout->addWidget(viewRecordsButton);
     rightLayout->addWidget(addTableButton);
     rightLayout->addWidget(propTableButton);
     rightLayout->addWidget(delTableButton);
     rightLayout->addWidget(updateButton);
+    rightLayout->addWidget(changeModeButton);
     rightLayout->addWidget(settingsButton);
     rightLayout->addWidget(quitButton);
     rightLayout->addSpacerItem(new QSpacerItem(220, 20, QSizePolicy::Fixed,
@@ -220,6 +225,24 @@ void TableListWidget::show()
 {
     MainWindow::Instance()->setCentralWidget(this);
     MainWindow::Instance()->setStatusLabelText("");
+
+    switch (MegaGuard::Instance()->getMode())
+    {
+        case User:
+            changeModeButton->setText(tr("Enter as Administarator"));
+            delTableButton->setVisible(false);
+            addTableButton->setVisible(false);
+            settingsButton->setVisible(false);
+            break;
+        case Admin:
+            changeModeButton->setText(tr("Enter as User"));
+            delTableButton->setVisible(true);
+            addTableButton->setVisible(true);
+            settingsButton->setVisible(true);
+            break;
+    }
+    changeModeButton->setStatusTip(changeModeButton->text());
+
     updateTablesList();
 }
 
@@ -235,8 +258,10 @@ void TableListWidget::propTable()
     {
         QString name = tableTableWidget->item(row, 0)->text();
         QString comment = tableTableWidget->item(row, 1)->text();
-        TableAdEdWidget::Instance()->show(TableAdEdWidget::EditMode,
-                                          name, comment);
+        TableAdEdWidget::Mode mode = MegaGuard::Instance()->getMode() == Admin
+                                     ? TableAdEdWidget::EditMode
+                                     : TableAdEdWidget::ViewMode;
+        TableAdEdWidget::Instance()->show(mode, name, comment);
     }
 }
 
@@ -253,4 +278,19 @@ void TableListWidget::delTable()
 void TableListWidget::settings()
 {
     SettingsWidget::Instance()->show();
+}
+
+void TableListWidget::changeMode()
+{
+    MegaGuardWidget *mg = MegaGuardWidget::Instance();
+    Privileges currentMode = MegaGuard::Instance()->getMode();
+    switch (currentMode)
+    {
+        case User:
+            mg->setMode(Admin);
+            break;
+        case Admin:
+            mg->setMode(User);
+            break;
+    }
 }

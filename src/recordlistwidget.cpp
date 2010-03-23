@@ -76,6 +76,17 @@ void RecordListWidget::show(const QString &table)
     MainWindow::Instance()->setStatusLabelText("");
     groupBox->setTitle(tr("Table: [%1]").arg(tableName));
     errorLabel->setVisible(false);
+    switch (MegaGuard::Instance()->getMode())
+    {
+        case User:
+            delRecordButton->setVisible(false);
+            addRecordButton->setVisible(false);
+            break;
+        case Admin:
+            delRecordButton->setVisible(true);
+            addRecordButton->setVisible(true);
+            break;
+    }
     updateRecordsList();
 }
 
@@ -255,7 +266,10 @@ void RecordListWidget::propRecord()
         QVariant::Type type = recordTableWidget->item(row ,3)->data(
                 Qt::UserRole).type();
         QVariant value = recordTableWidget->item(row, 4)->data(Qt::UserRole);
-        RecordAdEdView::Instance()->show(tableName, RecordAdEdView::EditMode,
+        RecordAdEdView::Mode mode = MegaGuard::Instance()->getMode() == Admin
+                                    ? RecordAdEdView::EditMode
+                                    : RecordAdEdView::ViewMode;
+        RecordAdEdView::Instance()->show(tableName, mode,
                                          title, comment, readOnly, type, value);
     }
 }

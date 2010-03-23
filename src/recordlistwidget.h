@@ -9,6 +9,7 @@
 #include "singleton.h"
 #include "recordadedview.h"
 #include "recorddeletewidget.h"
+#include "megaguardwidget.h"
 
 class RecordListWidget : public QWidget, public Singleton<RecordListWidget>
 {

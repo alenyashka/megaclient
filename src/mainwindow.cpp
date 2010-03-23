@@ -31,6 +31,8 @@ void MainWindow::readSettings()
     MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
     tcpSocket->setHost(settings.value("Network/host", "localhost").toString());
     tcpSocket->setPort(settings.value("Network/port", 6178).toInt());
+    MegaGuard::Instance()->setPassword(
+            settings.value("Privileges/password", "").toString());
 }
 
 void MainWindow::writeSettings()
@@ -42,6 +44,9 @@ void MainWindow::writeSettings()
     settings.beginGroup("Network");
     settings.setValue("host", MegaTcpSocket::Instance()->getHost());
     settings.setValue("port", MegaTcpSocket::Instance()->getPort());
+    settings.endGroup();
+    settings.beginGroup("Privileges");
+    settings.setValue("password", MegaGuard::Instance()->getPassword());
     settings.endGroup();
 }
 
