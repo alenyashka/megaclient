@@ -1,6 +1,7 @@
-megaclient (1.1) karmic; urgency=low
+megaclient (1.2) karmic; urgency=low
 
-    * Fixed bug when many users work;
+    * Add user's and admin's interface;
+    * Improve usability;
 
- -- Alexander O. Anisimov <anisimov2004@gmail.com> Sat, 14 Mar 2010 20:28:00 +0500
+ -- Alexander O. Anisimov <anisimov2004@gmail.com> Tue, 23 Mar 2010 14:25:00 +0500
 
