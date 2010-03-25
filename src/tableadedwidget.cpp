@@ -79,6 +79,8 @@ void TableAdEdWidget::show(const Mode &mode,
     }
     MainWindow::Instance()->setCentralWidget(this);
     MainWindow::Instance()->setStatusLabelText("");
+    connect(MegaConnector::Instance(), SIGNAL(response(QByteArray)),
+            this, SLOT(getResponse(QByteArray)));
 }
 
 void TableAdEdWidget::readOnlyMode(const bool &state)
@@ -115,20 +117,9 @@ void TableAdEdWidget::showError(const QString &error)
 void TableAdEdWidget::ok()
 {
     if (isError()) return;
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    connect(tcpSocket, SIGNAL(connected()),
-            this, SLOT(sendRequest()));
-    connect(tcpSocket, SIGNAL(readyRead()),
-            this, SLOT(getResponse()));
-    connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-            this, SLOT(error()));
-    connect(tcpSocket, SIGNAL(disconnected()),
-            this, SLOT(connectionClosedByServer()));
-    tcpSocket->abort();
-    tcpSocket->connectToHost();
     okButton->setEnabled(false);
-    MainWindow::Instance()->setStatusLabelText(tr("Connecting to server..."));
     nextBlockSize = 0;
+    sendRequest();
 }
 
 void TableAdEdWidget::sendRequest()
@@ -151,18 +142,21 @@ void TableAdEdWidget::sendRequest()
     out << nameLineEdit->text() << commentTextEdit->toPlainText();
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
-    MegaTcpSocket::Instance()->write(block);
+    MegaConnector::Instance()->write(block);
+    block.clear();
+    out.device()->seek(0);
+    out << quint16(0xFFFF);
+    MegaConnector::Instance()->write(block);
 }
 
-void TableAdEdWidget::getResponse()
+void TableAdEdWidget::getResponse(QByteArray block)
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    QDataStream in(tcpSocket);
+    QDataStream in(block);
     in.setVersion(QDataStream::Qt_4_5);
 
     if (nextBlockSize == 0)
     {
-        if (tcpSocket->bytesAvailable() < sizeof(quint16)) return;
+        if (in.device()->bytesAvailable() < sizeof(quint16)) return;
         in >> nextBlockSize;
     }
     if (nextBlockSize == 0xFFFF)
@@ -191,7 +185,6 @@ void TableAdEdWidget::getResponse()
             showError(tr("Table with this name already exist"));
             nameLineEdit->selectAll();
             nameLineEdit->setFocus();
-            tcpSocket->abort();
             okButton->setEnabled(true);
             nextBlockSize = 0;
             break;
@@ -199,7 +192,6 @@ void TableAdEdWidget::getResponse()
             showError(tr("This table is already deleted"));
             nameLineEdit->selectAll();
             nameLineEdit->setFocus();
-            tcpSocket->abort();
             okButton->setVisible(false);
             nextBlockSize = 0;
             break;
@@ -208,35 +200,9 @@ void TableAdEdWidget::getResponse()
     }
 }
 
-void TableAdEdWidget::error()
-{
-    MainWindow::Instance()->setStatusLabelText(
-            MegaTcpSocket::Instance()->errorString());
-    closeConnection();
-}
-
-void TableAdEdWidget::connectionClosedByServer()
-{
-    if (nextBlockSize != 0xFFFF)
-    {
-        MainWindow::Instance()->setStatusLabelText(
-                tr("Error: Connection closed by server"));
-    }
-}
-
 void TableAdEdWidget::closeConnection()
 {
     okButton->setEnabled(true);
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    disconnect(tcpSocket, SIGNAL(connected()),
-               this, SLOT(sendRequest()));
-    disconnect(tcpSocket, SIGNAL(readyRead()),
-               this, SLOT(getResponse()));
-    disconnect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-               this, SLOT(error()));
-    disconnect(tcpSocket, SIGNAL(disconnected()),
-               this, SLOT(connectionClosedByServer()));
-    tcpSocket->abort();
     TableListWidget::Instance()->show();
 }
 

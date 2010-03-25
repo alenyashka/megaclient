@@ -5,7 +5,7 @@
 #include <QWidget>
 #include "singleton.h"
 #include "mainwindow.h"
-#include "megatcpsocket.h"
+#include "megaconnector.h"
 #include "megaprotocol.h"
 
 class TableAdEdWidget : public QWidget, public Singleton<TableAdEdWidget>
@@ -25,9 +25,7 @@ private slots:
     void ok();
     void cancel();
     void sendRequest();
-    void getResponse();
-    void error();
-    void connectionClosedByServer();
+    void getResponse(QByteArray);
     void hideError();
 private:
     bool isError();
