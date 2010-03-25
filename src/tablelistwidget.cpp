@@ -202,6 +202,7 @@ void TableListWidget::show()
             this, SLOT(updateTablesList()));
     connect(MegaConnector::Instance(), SIGNAL(response(QByteArray)),
             this, SLOT(getUpdateTablesListResponse(QByteArray)));
+    updateTablesList();
 }
 
 void TableListWidget::addTable()
