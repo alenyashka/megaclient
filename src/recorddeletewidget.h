@@ -5,7 +5,6 @@
 #include <QWidget>
 #include "singleton.h"
 #include "recordlistwidget.h"
-#include "megatcpsocket.h"
 
 class RecordDeleteWidget : public QWidget, public Singleton<RecordDeleteWidget>
 {
@@ -19,9 +18,7 @@ private slots:
     void yes();
     void cancel();
     void sendRequest();
-    void getResponse();
-    void error();
-    void connectionClosedByServer();
+    void getResponse(QByteArray);
     void backToTableList();
 private:
     void showError(const QString&);

@@ -65,6 +65,8 @@ void RecordDeleteWidget::show(const QString &name,
     errorLabel->setVisible(false);
     backButton->setVisible(false);
     backToTableListButton->setVisible(false);
+    connect(MegaConnector::Instance(), SIGNAL(response(QByteArray)),
+            this, SLOT(getResponse(QByteArray)));
 }
 
 void RecordDeleteWidget::cancel()
@@ -74,21 +76,10 @@ void RecordDeleteWidget::cancel()
 
 void RecordDeleteWidget::yes()
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    connect(tcpSocket, SIGNAL(connected()),
-            this, SLOT(sendRequest()));
-    connect(tcpSocket, SIGNAL(readyRead()),
-            this, SLOT(getResponse()));
-    connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-            this, SLOT(error()));
-    connect(tcpSocket, SIGNAL(disconnected()),
-            this, SLOT(connectionClosedByServer()));
-    tcpSocket->abort();
-    tcpSocket->connectToHost();
     yesButton->setEnabled(false);
     noButton->setEnabled(false);
-    MainWindow::Instance()->setStatusLabelText(tr("Connecting to server..."));
     nextBlockSize = 0;
+    sendRequest();
 }
 
 void RecordDeleteWidget::sendRequest()
@@ -100,13 +91,16 @@ void RecordDeleteWidget::sendRequest()
     out << MegaProtocol::DEL_RECORD << this->tableName << this->recordTitle;
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
-    MegaTcpSocket::Instance()->write(block);
+    MegaConnector::Instance()->write(block);
+    block.clear();
+    out.device()->seek(0);
+    out << quint16(0xFFFF);
+    MegaConnector::Instance()->write(block);
 }
 
-void RecordDeleteWidget::getResponse()
+void RecordDeleteWidget::getResponse(QByteArray block)
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    QDataStream in(tcpSocket);
+    QDataStream in(block);
     in.setVersion(QDataStream::Qt_4_5);
     uint status;
     in >> status;
@@ -125,7 +119,6 @@ void RecordDeleteWidget::getResponse()
         {
             case MegaProtocol::RECORD_DELETED:
                 showError(tr("This record is already deleted"));
-                tcpSocket->abort();
                 nextBlockSize = 0;
                 yesButton->setVisible(false);
                 noButton->setVisible(false);
@@ -134,7 +127,6 @@ void RecordDeleteWidget::getResponse()
                 break;
             case MegaProtocol::TABLE_DELETED:
                 showError(tr("Table with this record is already deleted"));
-                tcpSocket->abort();
                 yesButton->setVisible(false);
                 noButton->setVisible(false);
                 backButton->setVisible(false);
@@ -147,22 +139,6 @@ void RecordDeleteWidget::getResponse()
     }
 }
 
-void RecordDeleteWidget::connectionClosedByServer()
-{
-   if (nextBlockSize != 0xFFFF)
-    {
-        MainWindow::Instance()->setStatusLabelText(
-                tr("Error: Connection closed by server"));
-    }
-}
-
-void RecordDeleteWidget::error()
-{
-    MainWindow::Instance()->setStatusLabelText(
-            MegaTcpSocket::Instance()->errorString());
-    closeConnection();
-}
-
 void RecordDeleteWidget::showError(const QString &error)
 {
     errorLabel->setText(QString("<font color=red>").append(error).append("</font>"));
@@ -173,16 +149,6 @@ void RecordDeleteWidget::closeConnection()
 {
     yesButton->setEnabled(true);
     noButton->setEnabled(true);
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    disconnect(tcpSocket, SIGNAL(connected()),
-               this, SLOT(sendRequest()));
-    disconnect(tcpSocket, SIGNAL(readyRead()),
-               this, SLOT(getResponse()));
-    disconnect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-               this, SLOT(error()));
-    disconnect(tcpSocket, SIGNAL(disconnected()),
-               this, SLOT(connectionClosedByServer()));
-    tcpSocket->abort();
     RecordListWidget::Instance()->show(this->tableName);
 }
 
