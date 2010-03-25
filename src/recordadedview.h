@@ -5,7 +5,6 @@
 #include <QWidget>
 #include "singleton.h"
 #include "mainwindow.h"
-#include "megatcpsocket.h"
 #include "megaprotocol.h"
 #include "util.h"
 
@@ -35,9 +34,7 @@ private slots:
     void readOnlyComboBoxCurrentIndexChanged();
     void setValidatorComboBoxCurrentIndexChanged(const int&);
     void sendRequest();
-    void getResponse();
-    void error();
-    void connectionClosedByServer();
+    void getResponse(QByteArray);
     void hideError();
     void backToTableList();
 private:
@@ -67,7 +64,6 @@ private:
     QPushButton *backToTableListButton;
     QGroupBox *groupBox;
     quint16 nextBlockSize;
-
 };
 
 #endif // RECORDADEDVIEW_H

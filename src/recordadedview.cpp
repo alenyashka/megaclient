@@ -117,18 +117,9 @@ void RecordAdEdView::showError(const QString &error)
 void RecordAdEdView::ok()
 {
     if (isError()) return;
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    connect(tcpSocket, SIGNAL(connected()), this, SLOT(sendRequest()));
-    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(getResponse()));
-    connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-            this, SLOT(error()));
-    connect(tcpSocket, SIGNAL(disconnected()),
-            this, SLOT(connectionClosedByServer()));
-    tcpSocket->abort();
-    tcpSocket->connectToHost();
     okButton->setEnabled(false);
-    MainWindow::Instance()->setStatusLabelText(tr("Connecting to server..."));
     nextBlockSize = 0;
+    sendRequest();
 }
 
 void RecordAdEdView::sendRequest()
@@ -159,13 +150,16 @@ void RecordAdEdView::sendRequest()
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
-    MegaTcpSocket::Instance()->write(block);
+    MegaConnector::Instance()->write(block);
+    block.clear();
+    out.device()->seek(0);
+    out << quint16(0xFFFF);
+    MegaConnector::Instance()->write(block);
 }
 
-void RecordAdEdView::getResponse()
+void RecordAdEdView::getResponse(QByteArray block)
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    QDataStream in(tcpSocket);
+    QDataStream in(block);
     in.setVersion(QDataStream::Qt_4_5);
     uint status;
     in >> status;
@@ -198,13 +192,11 @@ void RecordAdEdView::getResponse()
                 showError(tr("Record with this title already exist"));
                 titleLineEdit->selectAll();
                 titleLineEdit->setFocus();
-                tcpSocket->abort();
                 okButton->setEnabled(true);
                 nextBlockSize = 0;
                 break;
             case MegaProtocol::RECORD_DELETED:
                 showError(tr("This record is already deleted"));
-                tcpSocket->abort();
                 okButton->setVisible(false);
                 cancelButton->setVisible(false);
                 backToTableListButton->setVisible(false);
@@ -213,7 +205,6 @@ void RecordAdEdView::getResponse()
                 break;
             case MegaProtocol::TABLE_DELETED:
                 showError(tr("Table with this record is already deleted"));
-                tcpSocket->abort();
                 okButton->setVisible(false);
                 cancelButton->setVisible(false);
                 backButton->setVisible(false);
@@ -227,33 +218,9 @@ void RecordAdEdView::getResponse()
     }
 }
 
-void RecordAdEdView::error()
-{
-    MainWindow::Instance()->setStatusLabelText(
-            MegaTcpSocket::Instance()->errorString());
-    closeConnection();
-}
-
-void RecordAdEdView::connectionClosedByServer()
-{
-    if (nextBlockSize != 0xFFFF)
-    {
-        MainWindow::Instance()->setStatusLabelText(
-                tr("Error: Connection closed by server"));
-    }
-}
-
 void RecordAdEdView::closeConnection()
 {
     okButton->setEnabled(true);
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    disconnect(tcpSocket, SIGNAL(connected()), this, SLOT(sendRequest()));
-    disconnect(tcpSocket, SIGNAL(readyRead()), this, SLOT(getResponse()));
-    disconnect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-               this, SLOT(error()));
-    disconnect(tcpSocket, SIGNAL(disconnected()),
-               this, SLOT(connectionClosedByServer()));
-    tcpSocket->abort();
     RecordListWidget::Instance()->show(table);
 }
 
@@ -308,6 +275,8 @@ void RecordAdEdView::show(const QString &table,
 
     MainWindow::Instance()->setCentralWidget(this);
     MainWindow::Instance()->setStatusLabelText("");
+    connect(MegaConnector::Instance(), SIGNAL(response(QByteArray)),
+            this, SLOT(getResponse(QByteArray)));
 }
 
 void RecordAdEdView::viewMode()
