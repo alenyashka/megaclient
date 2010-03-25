@@ -20,9 +20,13 @@ private:
     QGroupBox *groupBox;
     QLabel *hostLabel;
     QLabel *portLabel;
+    QLabel *timeoutLabel;
+    QLabel *refreshLabel;
     QLabel *passLabel;
     QLineEdit *hostLineEdit;
     QLineEdit *portLineEdit;
+    QLineEdit *timeoutLineEdit;
+    QLineEdit *refreshLineEdit;
     QLineEdit *passLineEdit;
 };
 

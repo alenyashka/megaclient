@@ -14,6 +14,9 @@ SettingsWidget::SettingsWidget()
 
     hostLabel = new QLabel(tr("Host:"));
     portLabel = new QLabel(tr("Port:"));
+    timeoutLabel = new QLabel(tr("Time between attempts to connect to server "
+                                 "(sec):"));
+    refreshLabel = new QLabel(tr("Time between auto refresh UI (sec):"));
     passLabel = new QLabel(tr("Administartor's password:"));
 
     hostLineEdit = new QLineEdit();
@@ -22,6 +25,12 @@ SettingsWidget::SettingsWidget()
 
     portLineEdit = new QLineEdit();
     portLineEdit->setValidator(new QIntValidator(0, 65535, portLineEdit));
+
+    timeoutLineEdit = new QLineEdit();
+    timeoutLineEdit->setValidator(new QIntValidator(0, 120, timeoutLineEdit));
+
+    refreshLineEdit = new QLineEdit();
+    refreshLineEdit->setValidator(new QIntValidator(0, 120, refreshLineEdit));
 
     passLineEdit = new QLineEdit();
     passLineEdit->setEchoMode(QLineEdit::Password);
@@ -39,6 +48,10 @@ SettingsWidget::SettingsWidget()
     groupLayout->addWidget(hostLineEdit);
     groupLayout->addWidget(portLabel);
     groupLayout->addWidget(portLineEdit);
+    groupLayout->addWidget(timeoutLabel);
+    groupLayout->addWidget(timeoutLineEdit);
+    groupLayout->addWidget(refreshLabel);
+    groupLayout->addWidget(refreshLineEdit);
     groupLayout->addWidget(passLabel);
     groupLayout->addWidget(passLineEdit);
     groupLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
@@ -58,6 +71,8 @@ void SettingsWidget::show()
     MegaConnector *tcpSocket = MegaConnector::Instance();
     hostLineEdit->setText(QVariant(tcpSocket->getHost()).toString());
     portLineEdit->setText(QVariant(tcpSocket->getPort()).toString());
+    timeoutLineEdit->setText(QVariant(tcpSocket->getTimeout()).toString());
+    refreshLineEdit->setText(QVariant(tcpSocket->getRefreshRate()).toString());
     passLineEdit->setText(MegaGuard::Instance()->getPassword());
     MainWindow::Instance()->setCentralWidget(this);
 }
@@ -67,6 +82,8 @@ void SettingsWidget::ok()
     MegaConnector *tcpSocket = MegaConnector::Instance();
     tcpSocket->setHost(hostLineEdit->text());
     tcpSocket->setPort(QVariant(portLineEdit->text()).toUInt());
+    tcpSocket->setTimeout(QVariant(timeoutLineEdit->text()).toInt());
+    tcpSocket->setRefreshRate(QVariant(refreshLineEdit->text()).toInt());
     MegaGuard::Instance()->setPassword(passLineEdit->text());
     MainWindow::Instance()->writeSettings();
     TableListWidget::Instance()->show();
