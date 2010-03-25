@@ -1,9 +1,6 @@
 #ifndef RECORDDELETEWIDGET_H
 #define RECORDDELETEWIDGET_H
 
-#include <QtGui>
-#include <QWidget>
-#include "singleton.h"
 #include "recordlistwidget.h"
 
 class RecordDeleteWidget : public QWidget, public Singleton<RecordDeleteWidget>

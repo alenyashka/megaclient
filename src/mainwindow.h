@@ -2,12 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QtGui>
-#include "megaprotocol.h"
-#include "tablelistwidget.h"
-#include "recordlistwidget.h"
 #include "singleton.h"
 #include "megaguard.h"
 #include "megaconnector.h"
+#include "tablelistwidget.h"
 
 class TableListWidget;
 class MainWindow : public QMainWindow, public Singleton<MainWindow>

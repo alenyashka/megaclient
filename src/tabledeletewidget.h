@@ -1,12 +1,8 @@
 #ifndef TABLEDELETEWIDGET_H
 #define TABLEDELETEWIDGET_H
 
-#include <QtGui>
-#include <QWidget>
-#include "singleton.h"
-#include "mainwindow.h"
 #include "tablelistwidget.h"
-class MainWindow;
+
 class TableDeleteWidget : public QWidget, public Singleton<TableDeleteWidget>
 {
     Q_OBJECT

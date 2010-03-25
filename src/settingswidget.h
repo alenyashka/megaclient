@@ -1,11 +1,7 @@
 #ifndef SETTINGSWIDGET_H
 #define SETTINGSWIDGET_H
 
-#include <QtGui>
-#include <QWidget>
-#include "singleton.h"
 #include "tablelistwidget.h"
-#include "megaguard.h"
 
 class SettingsWidget : public QWidget, public Singleton<SettingsWidget>
 {

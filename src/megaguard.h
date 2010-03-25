@@ -2,7 +2,7 @@
 #define MEGAGUARD_H
 
 #include "singleton.h"
-#include <QtCore>
+#include <QString>
 
 enum Privileges
 {

@@ -1,16 +1,13 @@
 #ifndef TABLELISTWIDGET_H
 #define TABLELISTWIDGET_H
 
-#include <QtGui>
-#include <QWidget>
-#include "megaconnector.h"
-#include "megaprotocol.h"
 #include "mainwindow.h"
-#include "singleton.h"
+#include "megaprotocol.h"
 #include "tableadedwidget.h"
 #include "tabledeletewidget.h"
 #include "settingswidget.h"
 #include "megaguardwidget.h"
+#include "recordlistwidget.h"
 
 class TableListWidget : public QWidget, public Singleton<TableListWidget>
 {

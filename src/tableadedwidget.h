@@ -1,12 +1,7 @@
 #ifndef TABLEADEDWIDGET_H
 #define TABLEADEDWIDGET_H
 
-#include <QtGui>
-#include <QWidget>
-#include "singleton.h"
-#include "mainwindow.h"
-#include "megaconnector.h"
-#include "megaprotocol.h"
+#include "tablelistwidget.h"
 
 class TableAdEdWidget : public QWidget, public Singleton<TableAdEdWidget>
 {

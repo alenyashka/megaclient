@@ -1,15 +1,9 @@
 #ifndef RECORDLISTWIDGET_H
 #define RECORDLISTWIDGET_H
 
-#include <QtGui>
-#include <QWidget>
-#include "megaprotocol.h"
-#include "mainwindow.h"
-#include "singleton.h"
+#include "tablelistwidget.h"
 #include "recordadedview.h"
 #include "recorddeletewidget.h"
-#include "megaguardwidget.h"
-#include "megaconnector.h"
 
 class RecordListWidget : public QWidget, public Singleton<RecordListWidget>
 {

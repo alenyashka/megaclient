@@ -1,9 +1,6 @@
 #ifndef MEGAGUARDWIDGET_H
 #define MEGAGUARDWIDGET_H
 
-#include <QWidget>
-#include "singleton.h"
-#include "megaguard.h"
 #include "tablelistwidget.h"
 
 class MegaGuardWidget : public QWidget, public Singleton<MegaGuardWidget>

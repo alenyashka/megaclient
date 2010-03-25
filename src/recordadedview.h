@@ -1,11 +1,7 @@
 #ifndef RECORDADEDVIEW_H
 #define RECORDADEDVIEW_H
 
-#include <QtGui>
-#include <QWidget>
-#include "singleton.h"
-#include "mainwindow.h"
-#include "megaprotocol.h"
+#include "recordlistwidget.h"
 #include "util.h"
 
 class RecordAdEdView : public QWidget, public Singleton<RecordAdEdView>
