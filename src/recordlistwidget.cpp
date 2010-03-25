@@ -87,28 +87,21 @@ void RecordListWidget::show(const QString &table)
             addRecordButton->setVisible(true);
             break;
     }
+    connect(MegaConnector::Instance(), SIGNAL(refresh()),
+            this, SLOT(updateRecordsList()));
+    connect(MegaConnector::Instance(), SIGNAL(response(QByteArray)),
+            this, SLOT(getUpdateRecordsListResponse(QByteArray)));
     updateRecordsList();
 }
 
 void RecordListWidget::updateRecordsList()
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    connect(tcpSocket, SIGNAL(connected()),
-            this, SLOT(sendUpdateRecordsListRequest()));
-    connect(tcpSocket, SIGNAL(readyRead()),
-            this, SLOT(getUpdateRecordsListResponse()));
-    connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-            this, SLOT(errorUpdateRecordsList()));
-    connect(tcpSocket, SIGNAL(disconnected()),
-            this, SLOT(connectionUpdateRecordsListClosedByServer()));
     addRecordButton->setEnabled(false);
     propRecordButton->setEnabled(false);
     delRecordButton->setEnabled(false);
-    tcpSocket->abort();
-    tcpSocket->connectToHost();
     recordTableWidget->setRowCount(0);
-    MainWindow::Instance()->setStatusLabelText(tr("Connecting to server..."));
     nextBlockSize = 0;
+    sendUpdateRecordsListRequest();
 }
 
 void RecordListWidget::connectionUpdateRecordsListClosedByServer()
@@ -123,15 +116,6 @@ void RecordListWidget::connectionUpdateRecordsListClosedByServer()
 
 void RecordListWidget::closeUpdateRecordsListConnection()
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    disconnect(tcpSocket, SIGNAL(connected()),
-               this, SLOT(sendUpdateRecordsListRequest()));
-    disconnect(tcpSocket, SIGNAL(readyRead()),
-               this, SLOT(getUpdateRecordsListResponse()));
-    disconnect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-               this, SLOT(errorUpdateRecordsList()));
-    disconnect(tcpSocket, SIGNAL(disconnected()),
-               this, SLOT(connectionUpdateRecordsListClosedByServer()));
     addRecordButton->setEnabled(true);
     if (recordTableWidget->rowCount() > 0)
     {
@@ -139,7 +123,6 @@ void RecordListWidget::closeUpdateRecordsListConnection()
         propRecordButton->setEnabled(true);
         delRecordButton->setEnabled(true);
     }
-    tcpSocket->abort();
 }
 
 void RecordListWidget::errorUpdateRecordsList()
@@ -157,16 +140,16 @@ void RecordListWidget::sendUpdateRecordsListRequest()
     out << quint16(0) << MegaProtocol::GET_RECORDS_LIST << tableName;
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
+    MegaConnector::Instance()->write(block);
+    block.clear();
     out.device()->seek(0);
-    MegaTcpSocket::Instance()->write(block);
     out << quint16(0xFFFF);
-    MegaTcpSocket::Instance()->write(block);
+    MegaConnector::Instance()->write(block);
 }
 
-void RecordListWidget::getUpdateRecordsListResponse()
+void RecordListWidget::getUpdateRecordsListResponse(QByteArray block)
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    QDataStream in(tcpSocket);
+    QDataStream in(block);
     in.setVersion(QDataStream::Qt_4_5);
     uint state;
     in >> state;
@@ -177,7 +160,7 @@ void RecordListWidget::getUpdateRecordsListResponse()
             int row = recordTableWidget->rowCount();
             if (nextBlockSize == 0)
             {
-                if (tcpSocket->bytesAvailable() < sizeof(quint16)) break;
+                if (in.device()->bytesAvailable() < sizeof(quint16)) break;
                 in >> nextBlockSize;
             }
             if (nextBlockSize == 0xFFFF)
@@ -187,7 +170,7 @@ void RecordListWidget::getUpdateRecordsListResponse()
                         tr("Receipt %1 record(s)").arg(row));
                 break;
             }
-            if (tcpSocket->bytesAvailable() < nextBlockSize) break;
+            if (in.device()->bytesAvailable() < nextBlockSize) break;
             QString title;
             QString comment;
             bool readOnly;

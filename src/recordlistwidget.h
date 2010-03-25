@@ -3,13 +3,13 @@
 
 #include <QtGui>
 #include <QWidget>
-#include "megatcpsocket.h"
 #include "megaprotocol.h"
 #include "mainwindow.h"
 #include "singleton.h"
 #include "recordadedview.h"
 #include "recorddeletewidget.h"
 #include "megaguardwidget.h"
+#include "megaconnector.h"
 
 class RecordListWidget : public QWidget, public Singleton<RecordListWidget>
 {
@@ -22,7 +22,7 @@ protected:
 private slots:
     void updateRecordsList();
     void sendUpdateRecordsListRequest();
-    void getUpdateRecordsListResponse();
+    void getUpdateRecordsListResponse(QByteArray);
     void errorUpdateRecordsList();
     void connectionUpdateRecordsListClosedByServer();
     void backToTableList();
