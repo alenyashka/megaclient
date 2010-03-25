@@ -25,7 +25,7 @@ void MegaConnector::update()
 {
     mytimer = new QTimer;
     connect(mytimer, SIGNAL(timeout()), this, SIGNAL(refresh()));
-    mytimer->setInterval(/*refreshRate * */1000);
+    mytimer->setInterval(refreshRate * 1000);
     emit statusMsg(tr("Connection established"));
     attempt = 1;
     emit state(tcpSocket->state());
