@@ -19,9 +19,7 @@ private slots:
     void yes();
     void cancel();
     void sendRequest();
-    void getResponse();
-    void error();
-    void connectionClosedByServer();
+    void getResponse(QByteArray);
 private:
     void closeConnection();
     QString tableName;

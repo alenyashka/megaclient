@@ -44,6 +44,8 @@ void TableDeleteWidget::show(const QString &name)
     messageLabel->setText(tr("Now table %1 will be delete.\n"
                              "This action can not be reverted.\n"
                              "Do you agree?").arg(name));
+    connect(MegaConnector::Instance(), SIGNAL(response(QByteArray)),
+            this, SLOT(getResponse(QByteArray)));
 }
 
 void TableDeleteWidget::cancel()
@@ -53,37 +55,16 @@ void TableDeleteWidget::cancel()
 
 void TableDeleteWidget::yes()
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    connect(tcpSocket, SIGNAL(connected()),
-            this, SLOT(sendRequest()));
-    connect(tcpSocket, SIGNAL(readyRead()),
-            this, SLOT(getResponse()));
-    connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-            this, SLOT(error()));
-    connect(tcpSocket, SIGNAL(disconnected()),
-            this, SLOT(connectionClosedByServer()));
-    tcpSocket->abort();
-    tcpSocket->connectToHost();
     yesButton->setEnabled(false);
     noButton->setEnabled(false);
-    MainWindow::Instance()->setStatusLabelText(tr("Connecting to server..."));
     nextBlockSize = 0;
+    sendRequest();
 }
 
 void TableDeleteWidget::closeConnection()
 {
     yesButton->setEnabled(true);
     noButton->setEnabled(true);
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    disconnect(tcpSocket, SIGNAL(connected()),
-               this, SLOT(sendRequest()));
-    disconnect(tcpSocket, SIGNAL(readyRead()),
-               this, SLOT(getResponse()));
-    disconnect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-               this, SLOT(error()));
-    disconnect(tcpSocket, SIGNAL(disconnected()),
-               this, SLOT(connectionClosedByServer()));
-    tcpSocket->abort();
     TableListWidget::Instance()->show();
 }
 
@@ -96,18 +77,21 @@ void TableDeleteWidget::sendRequest()
     out << MegaProtocol::DEL_TABLE << this->tableName;
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
-    MegaTcpSocket::Instance()->write(block);
+    MegaConnector::Instance()->write(block);
+    block.clear();
+    out.device()->seek(0);
+    out <<  quint16(0xFFFF);
+    MegaConnector::Instance()->write(block);
 }
 
-void TableDeleteWidget::getResponse()
+void TableDeleteWidget::getResponse(QByteArray block)
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    QDataStream in(tcpSocket);
+    QDataStream in(block);
     in.setVersion(QDataStream::Qt_4_5);
 
     if (nextBlockSize == 0)
     {
-        if (tcpSocket->bytesAvailable() < sizeof(quint16)) return;
+        if (in.device()->bytesAvailable() < sizeof(quint16)) return;
         in >> nextBlockSize;
     }
     if (nextBlockSize == 0xFFFF)
@@ -117,22 +101,5 @@ void TableDeleteWidget::getResponse()
                 tr("Table deleted successfully"));
         return;
     }
-    tcpSocket->abort();
     nextBlockSize = 0;
-}
-
-void TableDeleteWidget::error()
-{
-    MainWindow::Instance()->setStatusLabelText(
-            MegaTcpSocket::Instance()->errorString());
-    closeConnection();
-}
-
-void TableDeleteWidget::connectionClosedByServer()
-{
-    if (nextBlockSize != 0xFFFF)
-    {
-        MainWindow::Instance()->setStatusLabelText(
-                tr("Error: Connection closed by server"));
-    }
 }
