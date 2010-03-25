@@ -23,8 +23,6 @@ private slots:
     void updateRecordsList();
     void sendUpdateRecordsListRequest();
     void getUpdateRecordsListResponse(QByteArray);
-    void errorUpdateRecordsList();
-    void connectionUpdateRecordsListClosedByServer();
     void backToTableList();
     void addRecord();
     void propRecord();

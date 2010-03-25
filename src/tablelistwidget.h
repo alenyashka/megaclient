@@ -24,8 +24,6 @@ private slots:
     void updateTablesList();
     void sendUpdateTablesListRequest();
     void getUpdateTablesListResponse(QByteArray);
-    void errorUpdateTablesList();
-    void connectionUpdateTablesListClosedByServer();
     void viewRecords();
     void addTable();
     void propTable();

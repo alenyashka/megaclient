@@ -104,16 +104,6 @@ void RecordListWidget::updateRecordsList()
     sendUpdateRecordsListRequest();
 }
 
-void RecordListWidget::connectionUpdateRecordsListClosedByServer()
-{
-    if (nextBlockSize != 0xFFFF)
-    {
-        MainWindow::Instance()->setStatusLabelText(
-                tr("Error: Connection closed by server"));
-    }
-    closeUpdateRecordsListConnection();
-}
-
 void RecordListWidget::closeUpdateRecordsListConnection()
 {
     addRecordButton->setEnabled(true);
@@ -123,13 +113,6 @@ void RecordListWidget::closeUpdateRecordsListConnection()
         propRecordButton->setEnabled(true);
         delRecordButton->setEnabled(true);
     }
-}
-
-void RecordListWidget::errorUpdateRecordsList()
-{
-    MainWindow::Instance()->setStatusLabelText(
-            MegaTcpSocket::Instance()->errorString());
-    closeUpdateRecordsListConnection();
 }
 
 void RecordListWidget::sendUpdateRecordsListRequest()

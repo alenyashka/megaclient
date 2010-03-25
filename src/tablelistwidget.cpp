@@ -90,16 +90,6 @@ void TableListWidget::updateTablesList()
     sendUpdateTablesListRequest();
 }
 
-void TableListWidget::connectionUpdateTablesListClosedByServer()
-{
-    if (nextBlockSize != 0xFFFF)
-    {
-        MainWindow::Instance()->setStatusLabelText(
-                tr("Error: Connection closed by server"));
-    }
-    closeUpdateTablesListConnection();
-}
-
 void TableListWidget::closeUpdateTablesListConnection()
 {
     addTableButton->setEnabled(true);
@@ -110,14 +100,6 @@ void TableListWidget::closeUpdateTablesListConnection()
         propTableButton->setEnabled(true);
         delTableButton->setEnabled(true);
     }
-}
-
-void TableListWidget::errorUpdateTablesList()
-{
-    addTableButton->setEnabled(false);
-    viewRecordsButton->setEnabled(false);
-    propTableButton->setEnabled(false);
-    delTableButton->setEnabled(false);
 }
 
 void TableListWidget::sendUpdateTablesListRequest()

@@ -4,7 +4,6 @@
 #include <QtGui>
 #include <QWidget>
 #include "singleton.h"
-#include "megatcpsocket.h"
 #include "tablelistwidget.h"
 #include "megaguard.h"
 

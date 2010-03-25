@@ -7,7 +7,6 @@ QT += network
 SOURCES += src/main.cpp \
     src/mainwindow.cpp \
     src/tablelistwidget.cpp \
-    src/megatcpsocket.cpp \
     src/recordlistwidget.cpp \
     src/tableadedwidget.cpp \
     src/tabledeletewidget.cpp \
@@ -22,7 +21,6 @@ SOURCES += src/main.cpp \
 HEADERS += src/mainwindow.h \
     src/megaprotocol.h \
     src/tablelistwidget.h \
-    src/megatcpsocket.h \
     src/recordlistwidget.h \
     src/singleton.h \
     src/tableadedwidget.h \

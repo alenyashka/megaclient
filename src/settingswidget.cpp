@@ -55,7 +55,7 @@ SettingsWidget::SettingsWidget()
 
 void SettingsWidget::show()
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
+    MegaConnector *tcpSocket = MegaConnector::Instance();
     hostLineEdit->setText(QVariant(tcpSocket->getHost()).toString());
     portLineEdit->setText(QVariant(tcpSocket->getPort()).toString());
     passLineEdit->setText(MegaGuard::Instance()->getPassword());
@@ -64,7 +64,7 @@ void SettingsWidget::show()
 
 void SettingsWidget::ok()
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
+    MegaConnector *tcpSocket = MegaConnector::Instance();
     tcpSocket->setHost(hostLineEdit->text());
     tcpSocket->setPort(QVariant(portLineEdit->text()).toUInt());
     MegaGuard::Instance()->setPassword(passLineEdit->text());

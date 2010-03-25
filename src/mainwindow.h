@@ -5,7 +5,6 @@
 #include "megaprotocol.h"
 #include "tablelistwidget.h"
 #include "recordlistwidget.h"
-#include "megatcpsocket.h"
 #include "singleton.h"
 #include "megaguard.h"
 #include "megaconnector.h"
