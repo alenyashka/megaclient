@@ -3,7 +3,7 @@
 
 #include <QtGui>
 #include <QWidget>
-#include "megatcpsocket.h"
+#include "megaconnector.h"
 #include "megaprotocol.h"
 #include "mainwindow.h"
 #include "singleton.h"
@@ -23,7 +23,7 @@ public:
 private slots:
     void updateTablesList();
     void sendUpdateTablesListRequest();
-    void getUpdateTablesListResponse();
+    void getUpdateTablesListResponse(QByteArray);
     void errorUpdateTablesList();
     void connectionUpdateTablesListClosedByServer();
     void viewRecords();
@@ -34,7 +34,6 @@ private slots:
     void changeMode();
 private:
     void closeUpdateTablesListConnection();
-    QPushButton *updateButton;
     QPushButton *settingsButton;
     QPushButton *quitButton;
     QPushButton *viewRecordsButton;

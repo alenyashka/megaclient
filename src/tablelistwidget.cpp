@@ -2,12 +2,6 @@
 
 TableListWidget::TableListWidget()
 {
-    updateButton = new QPushButton(tr("Update"));
-    updateButton->setShortcut(tr("Ctrl+R"));
-    updateButton->setStatusTip(tr("Update list of tables"));
-    updateButton->setIcon(QIcon(":/images/update.png"));
-    connect(updateButton, SIGNAL(clicked()), this, SLOT(updateTablesList()));
-
     settingsButton = new QPushButton(tr("Settings"));
     settingsButton->setStatusTip(tr("Edit settings of application"));
     settingsButton->setIcon(QIcon(":images/settings.png"));
@@ -52,7 +46,6 @@ TableListWidget::TableListWidget()
     rightLayout->addWidget(addTableButton);
     rightLayout->addWidget(propTableButton);
     rightLayout->addWidget(delTableButton);
-    rightLayout->addWidget(updateButton);
     rightLayout->addWidget(changeModeButton);
     rightLayout->addWidget(settingsButton);
     rightLayout->addWidget(quitButton);
@@ -60,8 +53,6 @@ TableListWidget::TableListWidget()
                                                QSizePolicy::Fixed));
     rightLayout->addSpacerItem(new QSpacerItem(20,40,QSizePolicy::Minimum,
                                                QSizePolicy::Expanding));
-
-
 
     tableTableWidget = new QTableWidget();
     tableTableWidget->setColumnCount(2);
@@ -90,25 +81,13 @@ TableListWidget::TableListWidget()
 
 void TableListWidget::updateTablesList()
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    connect(tcpSocket, SIGNAL(connected()),
-            this, SLOT(sendUpdateTablesListRequest()));
-    connect(tcpSocket, SIGNAL(readyRead()),
-            this, SLOT(getUpdateTablesListResponse()));
-    connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-            this, SLOT(errorUpdateTablesList()));
-    connect(tcpSocket, SIGNAL(disconnected()),
-            this, SLOT(connectionUpdateTablesListClosedByServer()));
-    tcpSocket->abort();
-    tcpSocket->connectToHost();
     tableTableWidget->setRowCount(0);
-    updateButton->setEnabled(false);
     viewRecordsButton->setEnabled(false);
     addTableButton->setEnabled(false);
     propTableButton->setEnabled(false);
     delTableButton->setEnabled(false);
-    MainWindow::Instance()->setStatusLabelText(tr("Connecting to server..."));
     nextBlockSize = 0;
+    sendUpdateTablesListRequest();
 }
 
 void TableListWidget::connectionUpdateTablesListClosedByServer()
@@ -123,16 +102,6 @@ void TableListWidget::connectionUpdateTablesListClosedByServer()
 
 void TableListWidget::closeUpdateTablesListConnection()
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    disconnect(tcpSocket, SIGNAL(connected()),
-               this, SLOT(sendUpdateTablesListRequest()));
-    disconnect(tcpSocket, SIGNAL(readyRead()),
-               this, SLOT(getUpdateTablesListResponse()));
-    disconnect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-               this, SLOT(errorUpdateTablesList()));
-    disconnect(tcpSocket, SIGNAL(disconnected()),
-               this, SLOT(connectionUpdateTablesListClosedByServer()));
-    updateButton->setEnabled(true);
     addTableButton->setEnabled(true);
     if (tableTableWidget->rowCount() > 0)
     {
@@ -141,27 +110,14 @@ void TableListWidget::closeUpdateTablesListConnection()
         propTableButton->setEnabled(true);
         delTableButton->setEnabled(true);
     }
-    tcpSocket->abort();
 }
 
 void TableListWidget::errorUpdateTablesList()
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    MainWindow::Instance()->setStatusLabelText(tcpSocket->errorString());
-    disconnect(tcpSocket, SIGNAL(connected()),
-               this, SLOT(sendUpdateTablesListRequest()));
-    disconnect(tcpSocket, SIGNAL(readyRead()),
-               this, SLOT(getUpdateTablesListResponse()));
-    disconnect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-               this, SLOT(errorUpdateTablesList()));
-    disconnect(tcpSocket, SIGNAL(disconnected()),
-               this, SLOT(connectionUpdateTablesListClosedByServer()));
-    updateButton->setEnabled(true);
     addTableButton->setEnabled(false);
     viewRecordsButton->setEnabled(false);
     propTableButton->setEnabled(false);
     delTableButton->setEnabled(false);
-    tcpSocket->abort();
 }
 
 void TableListWidget::sendUpdateTablesListRequest()
@@ -172,23 +128,23 @@ void TableListWidget::sendUpdateTablesListRequest()
     out << quint16(0) << MegaProtocol::GET_TABLES_LIST;
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
+    MegaConnector::Instance()->write(block);
+    block.clear();
     out.device()->seek(0);
-    MegaTcpSocket::Instance()->write(block);
     out << quint16(0xFFFF);
-    MegaTcpSocket::Instance()->write(block);
+    MegaConnector::Instance()->write(block);
 }
 
-void TableListWidget::getUpdateTablesListResponse()
+void TableListWidget::getUpdateTablesListResponse(QByteArray block)
 {
-    MegaTcpSocket *tcpSocket = MegaTcpSocket::Instance();
-    QDataStream in(tcpSocket);
+    QDataStream in(&block, QIODevice::ReadOnly);
     in.setVersion(QDataStream::Qt_4_5);
     forever
     {
         int row = tableTableWidget->rowCount();
         if (nextBlockSize == 0)
         {
-            if (tcpSocket->bytesAvailable() < sizeof(quint16)) break;
+            if (in.device()->bytesAvailable() < sizeof(quint16)) break;
             in >> nextBlockSize;
         }
         if (nextBlockSize == 0xFFFF)
@@ -198,7 +154,7 @@ void TableListWidget::getUpdateTablesListResponse()
                     tr("Receipt %1 table(s)").arg(row));
             break;
         }
-        if (tcpSocket->bytesAvailable() < nextBlockSize) break;
+        if (in.device()->bytesAvailable() < nextBlockSize) break;
         QString name;
         QString comment;
         in >> name >> comment;
@@ -242,8 +198,10 @@ void TableListWidget::show()
             break;
     }
     changeModeButton->setStatusTip(changeModeButton->text());
-
-    updateTablesList();
+    connect(MegaConnector::Instance(), SIGNAL(refresh()),
+            this, SLOT(updateTablesList()));
+    connect(MegaConnector::Instance(), SIGNAL(response(QByteArray)),
+            this, SLOT(getUpdateTablesListResponse(QByteArray)));
 }
 
 void TableListWidget::addTable()

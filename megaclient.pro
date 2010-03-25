@@ -17,7 +17,8 @@ SOURCES += src/main.cpp \
     src/settingswidget.cpp \
     src/apppath.cpp \
     src/megaguard.cpp \
-    src/megaguardwidget.cpp
+    src/megaguardwidget.cpp \
+    src/megaconnector.cpp
 HEADERS += src/mainwindow.h \
     src/megaprotocol.h \
     src/tablelistwidget.h \
@@ -32,7 +33,8 @@ HEADERS += src/mainwindow.h \
     src/settingswidget.h \
     src/apppath.h \
     src/megaguard.h \
-    src/megaguardwidget.h
+    src/megaguardwidget.h \
+    src/megaconnector.h
 FORMS += 
 RESOURCES += megaclient.qrc
 TRANSLATIONS += l10n/megaclient_ru.ts

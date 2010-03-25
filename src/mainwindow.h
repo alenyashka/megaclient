@@ -8,6 +8,7 @@
 #include "megatcpsocket.h"
 #include "singleton.h"
 #include "megaguard.h"
+#include "megaconnector.h"
 
 class TableListWidget;
 class MainWindow : public QMainWindow, public Singleton<MainWindow>
@@ -18,13 +19,15 @@ protected:
     friend class Singleton<MainWindow>;
     void closeEvent(QCloseEvent *event);
 public:
-    void setStatusLabelText(const QString&);
     void writeSettings();
     void show();
+public slots:
+    void setStatusLabelText(QString);
+    void state(QTcpSocket::SocketState);
 private:
     void readSettings();
-    QStatusBar *statusBar;
     QLabel *statusLabel;
+    QLabel *iconLabel;
     TableListWidget *tableListWidget;
 };
 
