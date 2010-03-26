@@ -28,6 +28,7 @@ private slots:
     void update();
     void error();
     void getResponse();
+    void tryToConnect();
 signals:
     void refresh();
     void statusMsg(QString);
@@ -35,7 +36,8 @@ signals:
     void response(QByteArray);
 private:
     QTcpSocket *tcpSocket;
-    QTimer *mytimer;
+    QTimer *updateTimer;
+    QTimer *connectTimer;
     QString host;
     quint16 port;
     quint16 attempt;

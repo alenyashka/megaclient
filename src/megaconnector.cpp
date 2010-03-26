@@ -4,10 +4,13 @@ MegaConnector::MegaConnector()
 {
     attempt = 1;
     tcpSocket = new QTcpSocket;
+    updateTimer = NULL;
+    connectTimer = NULL;
 }
 
 void MegaConnector::run()
 {
+    qRegisterMetaType<QAbstractSocket::SocketError>("QAbstractSocket::SocketError");
     connect(tcpSocket, SIGNAL(connected()),
             this, SLOT(update()), Qt::DirectConnection);
     connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
@@ -23,25 +26,49 @@ void MegaConnector::run()
 
 void MegaConnector::update()
 {
-    mytimer = new QTimer;
-    connect(mytimer, SIGNAL(timeout()), this, SIGNAL(refresh()));
-    mytimer->setInterval(refreshRate * 1000);
+    if ((connectTimer != NULL) && (connectTimer->isActive()))
+    {
+        connectTimer->stop();
+        free(connectTimer);
+        connectTimer = NULL;
+    }
+    updateTimer = new QTimer;
+    connect(updateTimer, SIGNAL(timeout()), this, SIGNAL(refresh()));
+    updateTimer->setInterval(refreshRate * 1000);
+    connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
+            this, SLOT(error()));
     emit statusMsg(tr("Connection established"));
     attempt = 1;
-    emit state(tcpSocket->state());
+    emit state(QTcpSocket::ConnectedState);
     emit refresh();
-    mytimer->start();
+    updateTimer->start();
 }
 
 void MegaConnector::error()
 {
-    emit statusMsg(tr("Error: %1").arg(tcpSocket->errorString()));
-    emit state(tcpSocket->state());
-    sleep(timeout);
+    emit refresh();
+    emit statusMsg(tr("Connection refused"));
+    emit state(QTcpSocket::UnconnectedState);
+    if ((updateTimer != NULL) && (updateTimer->isActive()))
+    {
+        updateTimer->stop();
+        free(updateTimer);
+        updateTimer = NULL;
+    }
+    connectTimer = new QTimer;
+    connect(connectTimer, SIGNAL(timeout()), this, SLOT(tryToConnect()));
+    disconnect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
+            this, SLOT(error()));
+    connectTimer->setInterval(timeout * 1000);
+    connectTimer->start();
+}
+
+void MegaConnector::tryToConnect()
+{
     emit statusMsg(tr("Attempt %1: Connecting to server...").arg(attempt));
+    attempt++;
     tcpSocket->close();
     tcpSocket->connectToHost(host, port);
-    attempt++;
 }
 
 void MegaConnector::setHost(const QString &host)
