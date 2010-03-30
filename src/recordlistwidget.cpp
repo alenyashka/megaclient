@@ -96,6 +96,11 @@ void RecordListWidget::show(const QString &table)
 
 void RecordListWidget::updateRecordsList()
 {
+    int row = recordTableWidget->currentRow();
+    if (!(row < 0))
+    {
+        recordTitle = recordTableWidget->item(row, 0)->text();
+    }
     addRecordButton->setEnabled(false);
     propRecordButton->setEnabled(false);
     delRecordButton->setEnabled(false);
@@ -109,7 +114,15 @@ void RecordListWidget::closeUpdateRecordsListConnection()
     addRecordButton->setEnabled(true);
     if (recordTableWidget->rowCount() > 0)
     {
-        recordTableWidget->selectRow(0);
+        QList<QTableWidgetItem*> find = recordTableWidget->findItems(recordTitle, Qt::MatchFixedString);
+        if (find.size() > 0)
+        {
+            recordTableWidget->selectRow(find.at(0)->row());
+        }
+        else
+        {
+            recordTableWidget->selectRow(0);
+        }
         propRecordButton->setEnabled(true);
         delRecordButton->setEnabled(true);
     }

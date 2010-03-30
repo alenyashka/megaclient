@@ -81,6 +81,11 @@ TableListWidget::TableListWidget()
 
 void TableListWidget::updateTablesList()
 {
+    int row = tableTableWidget->currentRow();
+    if (!(row < 0))
+    {
+        tableName = tableTableWidget->item(row, 0)->text();
+    }
     tableTableWidget->setRowCount(0);
     viewRecordsButton->setEnabled(false);
     addTableButton->setEnabled(false);
@@ -95,7 +100,15 @@ void TableListWidget::closeUpdateTablesListConnection()
     addTableButton->setEnabled(true);
     if (tableTableWidget->rowCount() > 0)
     {
-        tableTableWidget->selectRow(0);
+        QList<QTableWidgetItem*> find = tableTableWidget->findItems(tableName, Qt::MatchFixedString);
+        if (find.size() > 0)
+        {
+            tableTableWidget->selectRow(find.at(0)->row());
+        }
+        else
+        {
+            tableTableWidget->selectRow(0);
+        }
         viewRecordsButton->setEnabled(true);
         propTableButton->setEnabled(true);
         delTableButton->setEnabled(true);

@@ -33,6 +33,7 @@ private:
     QLabel *errorLabel;
     QGroupBox *groupBox;
     quint16 nextBlockSize;
+    QString recordTitle;
 };
 
 #endif // RECORDLISTWIDGET_H

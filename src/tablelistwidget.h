@@ -39,6 +39,7 @@ private:
     QTableWidget *tableTableWidget;
     QGroupBox *groupBox;
     quint16 nextBlockSize;
+    QString tableName;
 };
 
 #endif // TABLELISTWIDGET_H
